@@ -1,0 +1,27 @@
+# Dependency directories
+# These folders contain third-party libraries and should be installed by package managers, not committed.
+/node_modules
+
+# Build output
+# This directory contains the compiled JavaScript code from your TypeScript source.
+/dist
+/build
+
+# TypeScript cache file
+# This file is used by TypeScript's incremental build to speed up compilation.
+*.tsbuildinfo
+
+# Environment variables
+# These files contain sensitive information like API keys and database credentials.
+# It's a good practice to commit a .env.example file with placeholder values.
+.env
+.env.*
+!.env.example
+
+# Logs
+# Log files are generated during runtime and should not be part of the repository.
+*.log
+npm-debug.log*
+
+# OS-generated files
+.DS_Store
