@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import "./config/env";
 import { loggerMiddleware } from "./middlewares/logger";
 import { errorHandlerMiddleware } from "./middlewares/errorHandler";
+import mainRouter from "./routes";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ App.use(express.json());
 
 // General logger middleware. For debugging purposes.
 App.use(loggerMiddleware);
+App.use("/api", mainRouter);
 
 // Your API routes would go here
 
