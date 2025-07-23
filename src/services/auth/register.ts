@@ -3,7 +3,7 @@ import { hashPassword } from "../../utils/auth/hashPassword";
 import { registerUserQuery } from "../../db/auth/registerUserQuery";
 
 export async function registerUserService(props: Partial<User>) {
-  const { firstName, lastName, email, password, role } = props;
+  const { firstName, lastName, email, password } = props;
 
   const hash = await hashPassword(password!);
 
@@ -12,7 +12,7 @@ export async function registerUserService(props: Partial<User>) {
     lastName,
     email,
     password: hash,
-    role,
+    role: "admin",
   });
 
   return result;
