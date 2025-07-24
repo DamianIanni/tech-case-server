@@ -14,10 +14,10 @@ App.use(cors());
 App.use(express.json());
 
 // General logger middleware. For debugging purposes.
-App.use(loggerMiddleware);
+if (process.env.NODE_ENV === "development") {
+  App.use(loggerMiddleware);
+}
 App.use("/api", mainRouter);
-
-// Your API routes would go here
 
 // Error handling middleware should be the last middleware
 App.use(errorHandlerMiddleware);

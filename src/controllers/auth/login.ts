@@ -5,13 +5,13 @@ import { generateToken } from "../../utils/auth/generateToken";
 
 export const loginUserController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { email, first_name, last_name, id, role } = res.locals.user;
-    const user = { email, first_name, last_name, id, role };
+    const { email, first_name, last_name, id } = res.locals.user;
+    const user = { email, first_name, last_name, id };
     const token = generateToken(user);
 
     res.status(200).json({
       token,
-      user: { email, first_name, last_name, id, role },
+      user: { email, first_name, last_name, id },
     });
   }
 );

@@ -12,7 +12,6 @@ export async function registerUserService(props: Partial<User>) {
     lastName,
     email,
     password: hash,
-    role: "admin",
   });
 
   return result;

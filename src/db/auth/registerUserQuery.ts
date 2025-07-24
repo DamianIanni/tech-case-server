@@ -7,10 +7,9 @@ export async function registerUserQuery({
   lastName,
   email,
   password,
-  role,
 }: Partial<User>) {
-  const values = [firstName, lastName, email, password, role];
+  const values = [firstName, lastName, email, password];
 
   const result = await dbpool.query(REGISTER_USER, values);
-  return result;
+  return result.rows[0].id;
 }

@@ -6,7 +6,7 @@ export const findUserByEmailQuery = async (
 ) => {
   const sql = register
     ? "SELECT 1 FROM users WHERE email = $1 LIMIT 1"
-    : "SELECT first_name, last_name, email, role, password, id FROM users WHERE email = $1";
+    : "SELECT first_name, last_name, email, password, id FROM users WHERE email = $1";
   const result = await dbpool.query(sql, [email]);
 
   return result;
