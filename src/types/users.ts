@@ -3,7 +3,17 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
-  password: string; // In a real application, you would not store passwords in plain text
+  password: string;
 };
 
 export type UserRole = "admin" | "manager" | "employee";
+
+export type UsersTableData = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: UserRole;
+  status: "active" | "inactive" | "pending";
+  center_id: string;
+};

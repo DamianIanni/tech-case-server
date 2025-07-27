@@ -21,3 +21,15 @@ export const inviteUserSchema = Joi.object({
   role: Joi.string().valid("employee", "manager", "admin").required(),
   center: Joi.number().required(),
 });
+
+export const updateUserSchema = Joi.object({
+  firstName: Joi.string().min(2).max(100),
+  lastName: Joi.string().min(2).max(100),
+  password: Joi.string().min(6),
+  role: Joi.string().valid("employee", "manager", "admin"),
+  status: Joi.string().valid("active", "inactive", "pending"),
+})
+  .min(1)
+  .messages({
+    "object.min": "At least one field must be provided for update.",
+  });

@@ -1,5 +1,5 @@
 import { dbpool } from "../../config/database";
-import { ADD_INVITE_USER_CENTER } from "../queriesString/inviteUser";
+import { ADD_INVITE_USER_CENTER } from "../queriesString/user";
 
 export type InvitedUserProps = {
   user_id: string;
