@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 export const authorizeAdminInCenter = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req!.user!.id; // del token
-    const { centerId } = req.params;
+    const { center_id } = req.params;
 
     const result = await dbpool.query(
       `
@@ -13,7 +13,7 @@ export const authorizeAdminInCenter = asyncHandler(
     FROM user_centers
     WHERE user_id = $1 AND center_id = $2
     `,
-      [userId, centerId]
+      [userId, center_id]
     );
 
     if (result.rowCount === 0) {
@@ -31,7 +31,7 @@ export const authorizeAdminInCenter = asyncHandler(
     }
 
     // Attach info al request si necesitás
-    req.auth = { role, centerId };
+    req.auth = { role, center_id };
     next();
   }
 );
