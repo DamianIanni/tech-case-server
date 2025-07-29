@@ -4,13 +4,11 @@ import {
 } from "../../db/users/getAllUsersQuery";
 
 export const getAllUsersService = async (center_id: string) => {
-  const centerId = Number(center_id);
-  const result = await getAllUsersQuery(centerId);
+  const result = await getAllUsersQuery(center_id);
   return result;
 };
 
 export const getUserByIdService = async (user_id: string) => {
-  const centerId = Number(user_id);
-  const result = await getAllUsersQuery(centerId);
+  const result = await getAllUsersQuery(user_id);
   return result;
 };

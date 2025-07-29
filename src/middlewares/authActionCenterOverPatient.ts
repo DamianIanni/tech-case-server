@@ -9,13 +9,13 @@ export const authorizeActionInCenterOverPatient = asyncHandler(
 
     const result = await dbpool.query(
       `
-    SELECT
-      uc.role,
-      p.id AS patient_id
-    FROM user_centers uc
-    LEFT JOIN patients p ON p.center_id = uc.center_id AND p.id = $3
-    WHERE uc.user_id = $1 AND uc.center_id = $2
-    `,
+      SELECT 
+        uc.role,
+        pc.patient_id
+      FROM user_centers uc
+      LEFT JOIN patient_centers pc ON pc.center_id = uc.center_id AND pc.patient_id = $3
+      WHERE uc.user_id = $1 AND uc.center_id = $2
+      `,
       [userId, centerId, patientId]
     );
 
@@ -33,7 +33,6 @@ export const authorizeActionInCenterOverPatient = asyncHandler(
         .json({ message: "Patient not found in this center" });
     }
 
-    // Attach data to request for next handler
     req.auth = { role, centerId };
     next();
   }
