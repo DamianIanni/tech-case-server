@@ -9,6 +9,6 @@ export const getAllUsersService = async (center_id: string) => {
 };
 
 export const getUserByIdService = async (user_id: string) => {
-  const result = await getAllUsersQuery(user_id);
+  const result = await getUserByIdQuery(user_id);
   return result;
 };

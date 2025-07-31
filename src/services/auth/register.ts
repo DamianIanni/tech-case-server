@@ -5,7 +5,11 @@ import { registerUserQuery } from "../../db/auth/registerUserQuery";
 export async function registerUserService(props: Partial<User>) {
   const { firstName, lastName, email, password } = props;
 
-  const hash = await hashPassword(password!);
+  if (!password) {
+    throw new Error('Password is required');
+  }
+
+  const hash = await hashPassword(password);
 
   const result = await registerUserQuery({
     firstName,
