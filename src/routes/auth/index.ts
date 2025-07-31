@@ -4,10 +4,9 @@ import {
   registerUserSchema,
   loginUserSchema,
 } from "../../validations/userSchema";
-import { registerUserController } from "../../controllers/auth";
+import { registerUserController, loginUserController, logoutUserController } from "../../controllers/auth";
 import { userExistMiddleware } from "../../middlewares/auth/userExist";
 import { passwordMiddleware } from "../../middlewares/auth/passwordMidleware";
-import { loginUserController } from "../../controllers/auth";
 
 const authRouter = Router();
 
@@ -24,5 +23,7 @@ authRouter.post(
   passwordMiddleware,
   loginUserController
 );
+
+authRouter.post("/logout", (req, res, next) => logoutUserController(req, res, next));
 
 export default authRouter;

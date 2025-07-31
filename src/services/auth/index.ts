@@ -1,3 +1,4 @@
 import { registerUserService } from "./register";
+import { logoutUserService } from "./logout";
 
-export { registerUserService };
+export { registerUserService, logoutUserService };
