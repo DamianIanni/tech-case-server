@@ -5,12 +5,14 @@ import "./config/env";
 import { loggerMiddleware } from "./middlewares/logger";
 import { errorHandlerMiddleware } from "./middlewares/errorHandler";
 import mainRouter from "./routes";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 export const App = express();
 
-App.use(cors());
+App.use(cookieParser());
+App.use(cors({ origin: "http://localhost:3000", credentials: true }));
 App.use(express.json());
 
 // General logger middleware. For debugging purposes.
