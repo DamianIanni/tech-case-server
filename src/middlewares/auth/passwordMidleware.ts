@@ -10,6 +10,7 @@ export const passwordMiddlewareHandler = async (
 ) => {
   const { email, password } = req.body;
   const user = await findUserByEmailQuery(email);
+
   if (!user || !user.rows || !user.rows[0]) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
@@ -19,9 +20,15 @@ export const passwordMiddlewareHandler = async (
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  res.locals.user = user.rows[0];
+  const localUser = {
+    email,
+    id: user.rows[0].id,
+    first_name: user.rows[0].first_name,
+    last_name: user.rows[0].last_name,
+  };
+
+  res.locals.user = localUser;
   next();
 };
 
 export const passwordMiddleware = asyncHandler(passwordMiddlewareHandler);
-

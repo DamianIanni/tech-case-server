@@ -29,15 +29,14 @@ centerRouter.post(
 
 centerRouter.get(
   "/all-centers",
-  requireMinRole("admin"),
+  // requireMinRole("employee"),
   //   validateSchemaMiddleware(centerIdSchema, "params"),
   getAllCentersController
 );
 
-centerRouter.use(authorizeAdminInCenter);
-
 centerRouter.patch(
   "/:center_id",
+  authorizeAdminInCenter,
   validateSchemaMiddleware(centerIdSchema, "params"),
   validateSchemaMiddleware(updateCenterSchema, "body"),
   updateCenterController
@@ -45,13 +44,15 @@ centerRouter.patch(
 
 centerRouter.delete(
   "/:center_id",
+  authorizeAdminInCenter,
   validateSchemaMiddleware(centerIdSchema, "params"),
   deleteCenterController
 );
 
 centerRouter.get(
   "/:center_id",
-  validateSchemaMiddleware(centerUserIdSchema, "params"),
+  authorizeAdminInCenter,
+  // validateSchemaMiddleware(centerUserIdSchema, "params"),
   getCenterController
 );
 

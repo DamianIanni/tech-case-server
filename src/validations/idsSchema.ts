@@ -13,3 +13,8 @@ export const centerPatientIdSchema = Joi.object({
 export const centerIdSchema = Joi.object({
   center_id: Joi.string().uuid().required(),
 });
+
+export const centerIdRoleSchema = Joi.object({
+  center_id: Joi.string().uuid().required(),
+  role: Joi.string().valid("employee", "manager", "admin"),
+});

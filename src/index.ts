@@ -1,12 +1,12 @@
 import { App } from "./app";
 import { testDbConnection } from "./db/testConnection";
-
-const PORT = process.env.PORT || 4000;
+import { env } from "./config/env";
+const PORT = env.PORT || 4000;
 
 App.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   // testDbConnection();
 }
