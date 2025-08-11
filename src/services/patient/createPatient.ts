@@ -1,11 +1,11 @@
-import { Patient } from "../../types/patient";
+import { CreatePatientInput } from "../../validations/patientSchema";
 import {
   createPatientQuery,
   createPatientInCenterQuery,
 } from "../../db/patient/createPatient";
 
 export async function createPatientService(
-  patientData: Patient,
+  patientData: CreatePatientInput,
   centerId: string
 ) {
   const patient = await createPatientQuery(patientData, centerId);

@@ -1,10 +1,10 @@
 import { dbpool } from "../../config/database";
 import { UPDATE_PATIENT } from "../../db/queriesString/patient";
-import { Patient } from "../../types/patient";
+import { UpdatePatientInput } from "../../validations/patientSchema";
 
 export async function updatePatientQuery(
   patientId: string,
-  updateData: Partial<Patient>
+  updateData: UpdatePatientInput,
 ) {
   const {
     first_name,

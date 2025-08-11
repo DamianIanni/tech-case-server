@@ -1,20 +1,24 @@
-import Joi from "joi";
+import { z } from "zod";
 
-export const centerUserIdSchema = Joi.object({
-  user_id: Joi.string().uuid().required(),
-  center_id: Joi.string().uuid().required(),
+export const centerUserIdSchema = z.object({
+  user_id: z.uuid(),
+  center_id: z.uuid(),
 });
+export type CenterUserIdInput = z.infer<typeof centerUserIdSchema>;
 
-export const centerPatientIdSchema = Joi.object({
-  user_id: Joi.string().uuid().required(),
-  center_id: Joi.string().uuid().required(),
+export const centerPatientIdSchema = z.object({
+  user_id: z.uuid(),
+  center_id: z.uuid(),
 });
+export type CenterPatientIdInput = z.infer<typeof centerPatientIdSchema>;
 
-export const centerIdSchema = Joi.object({
-  center_id: Joi.string().uuid().required(),
+export const centerIdSchema = z.object({
+  center_id: z.uuid(),
 });
+export type CenterIdInput = z.infer<typeof centerIdSchema>;
 
-export const centerIdRoleSchema = Joi.object({
-  center_id: Joi.string().uuid().required(),
-  role: Joi.string().valid("employee", "manager", "admin"),
+export const centerIdRoleSchema = z.object({
+  center_id: z.uuid(),
+  role: z.enum(["employee", "manager", "admin"]),
 });
+export type CenterIdRoleInput = z.infer<typeof centerIdRoleSchema>;

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-// import { User } from "../../types/users";
+import { InviteUserInput } from "../../validations/userSchema";
 import { registerUserService } from "../../services/auth";
 import { addInvitedUserService } from "../../services/user";
 import { asyncHandler } from "../../utils/asyncHandler";

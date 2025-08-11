@@ -1,9 +1,9 @@
 import { updatePatientQuery } from "../../db/patient/updatePatient";
-import { Patient } from "../../types/patient";
+import { UpdatePatientInput } from "../../validations/patientSchema";
 
 export async function updatePatientService(
   patientId: string,
-  updateData: Partial<Patient>
+  updateData: UpdatePatientInput
 ) {
   const updatedPatient = await updatePatientQuery(patientId, updateData);
   return updatedPatient;

@@ -1,16 +1,19 @@
 // src/middlewares/validateSchemaMiddleware.ts
 import { Request, Response, NextFunction } from "express";
-import { ObjectSchema } from "joi";
+import { ZodSchema, ZodError } from "zod";
 
 export const validateSchemaMiddleware = (
-  schema: ObjectSchema,
+  schema: ZodSchema,
   source: "body" | "query" | "params" = "body"
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { error } = schema.validate(req[source]);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+    const result = schema.safeParse(req[source]);
+    if (!result.success) {
+      const zodError = result.error as ZodError;
+      return res.status(400).json({ error: zodError.issues[0].message });
     }
+    // Overwrite the validated data back to request to ensure correct typing
+    req[source] = result.data as any;
     next();
   };
 };

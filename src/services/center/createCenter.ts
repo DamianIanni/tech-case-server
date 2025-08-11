@@ -1,11 +1,11 @@
-import { Center } from "../../types/center";
+import { CreateCenterInput } from "../../validations/centerSchema";
 import {
   createCenterQuery,
   insertUserCenterQuery,
 } from "../../db/center/createCenterQuery";
 
-export async function createCenterService(props: Partial<Center>) {
-  const { name, address, phone } = props;
+export async function createCenterService(center: CreateCenterInput) {
+  const { name, address, phone } = center;
   const result = await createCenterQuery({
     name,
     address,

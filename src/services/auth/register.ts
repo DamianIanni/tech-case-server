@@ -1,8 +1,8 @@
-import { User } from "../../types/users";
+import { RegisterUserInput } from "../../validations/userSchema";
 import { hashPassword } from "../../utils/auth/hashPassword";
 import { registerUserQuery } from "../../db/auth/registerUserQuery";
 
-export async function registerUserService(props: Partial<User>) {
+export async function registerUserService(props: RegisterUserInput) {
   const { firstName, lastName, email, password } = props;
 
   if (!password) {

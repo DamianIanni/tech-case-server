@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { Patient } from "../../types/patient";
+import { UpdatePatientInput } from "../../validations/patientSchema";
 import { updatePatientService } from "../../services/patient";
 import { asyncHandler } from "../../utils/asyncHandler";
 
 export const updatePatientController = asyncHandler(
   async (req: Request, res: Response) => {
     const { patientId } = req.params;
-    const updateData: Partial<Patient> = req.body;
+    const updateData: UpdatePatientInput = req.body;
 
     const updatedPatient = await updatePatientService(patientId, updateData);
 

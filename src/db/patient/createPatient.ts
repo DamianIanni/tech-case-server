@@ -3,10 +3,10 @@ import {
   CREATE_PATIENT,
   CREATE_PATIENT_IN_CENTER,
 } from "../queriesString/patient";
-import { Patient } from "../../types/patient";
+import { CreatePatientInput } from "../../validations/patientSchema";
 
 export async function createPatientQuery(
-  patient: Partial<Patient>,
+  patient: CreatePatientInput,
   centerId: string
 ) {
   const {

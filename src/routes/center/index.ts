@@ -36,7 +36,7 @@ centerRouter.get(
 
 centerRouter.patch(
   "/:center_id",
-  authorizeAdminInCenter,
+  requireMinRole("admin"),
   validateSchemaMiddleware(centerIdSchema, "params"),
   validateSchemaMiddleware(updateCenterSchema, "body"),
   updateCenterController
@@ -44,16 +44,11 @@ centerRouter.patch(
 
 centerRouter.delete(
   "/:center_id",
-  authorizeAdminInCenter,
   validateSchemaMiddleware(centerIdSchema, "params"),
+  requireMinRole("admin"),
   deleteCenterController
 );
 
-centerRouter.get(
-  "/:center_id",
-  authorizeAdminInCenter,
-  // validateSchemaMiddleware(centerUserIdSchema, "params"),
-  getCenterController
-);
+centerRouter.get("/me", requireMinRole("admin"), getCenterController);
 
 export default centerRouter;

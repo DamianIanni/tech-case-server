@@ -5,7 +5,7 @@ import { env } from "../../config/env";
 
 export const finalTokenController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id, first_name, last_name, email } = req.user;
+    const { id, first_name, last_name, email } = req.user!;
     const { center_id, role } = req.body;
 
     const user = { id, first_name, last_name, email, center_id, role };

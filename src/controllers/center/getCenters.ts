@@ -10,7 +10,7 @@ export const getAllCentersController = asyncHandler(
 
     const centerContext = await centerContextService(user_id);
     if (!centerContext.length) {
-      return res.status(200).json({ centerContext: [] });
+      return res.status(200).json([]);
     }
 
     res.status(200).json(centerContext);
@@ -19,15 +19,15 @@ export const getAllCentersController = asyncHandler(
 
 export const getCenterController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { center_id } = req.params;
     const user_id = req.user!.id!;
+    const center_id = req.user!.center_id!;
 
     const center = await getCenterService(center_id, user_id);
 
     if (!center) {
-      return res.status(200).json({ center: null });
+      return res.status(200).json(null);
     }
 
-    res.status(200).json({ center });
+    res.status(200).json(center[0]);
   }
 );

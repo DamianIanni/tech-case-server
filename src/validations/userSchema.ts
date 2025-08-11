@@ -1,35 +1,39 @@
 // src/validations/userSchemas.ts
-import Joi from "joi";
+import { z } from "zod";
 
-export const registerUserSchema = Joi.object({
-  firstName: Joi.string().min(2).max(100).required(),
-  lastName: Joi.string().min(2).max(100).required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+export const registerUserSchema = z.object({
+  firstName: z.string().min(2).max(100),
+  lastName: z.string().min(2).max(100),
+  email: z.email(),
+  password: z.string().min(6),
 });
+export type RegisterUserInput = z.infer<typeof registerUserSchema>;
 
-export const loginUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+export const loginUserSchema = z.object({
+  email: z.email(),
+  password: z.string().min(6),
 });
+export type LoginUserInput = z.infer<typeof loginUserSchema>;
 
-export const inviteUserSchema = Joi.object({
-  firstName: Joi.string().min(2).max(100).required(),
-  lastName: Joi.string().min(2).max(100).required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-  role: Joi.string().valid("employee", "manager", "admin").required(),
-  center: Joi.number().required(),
+export const inviteUserSchema = z.object({
+  firstName: z.string().min(2).max(100),
+  lastName: z.string().min(2).max(100),
+  email: z.email(),
+  password: z.string().min(6),
+  role: z.enum(["employee", "manager", "admin"]),
+  center: z.number().int(),
 });
+export type InviteUserInput = z.infer<typeof inviteUserSchema>;
 
-export const updateUserSchema = Joi.object({
-  firstName: Joi.string().min(2).max(100),
-  lastName: Joi.string().min(2).max(100),
-  password: Joi.string().min(6),
-  role: Joi.string().valid("employee", "manager", "admin"),
-  status: Joi.string().valid("active", "inactive", "pending"),
-})
-  .min(1)
-  .messages({
-    "object.min": "At least one field must be provided for update.",
+export const updateUserSchema = z
+  .object({
+    firstName: z.string().min(2).max(100).optional(),
+    lastName: z.string().min(2).max(100).optional(),
+    password: z.string().min(6).optional(),
+    role: z.enum(["employee", "manager", "admin"]).optional(),
+    status: z.enum(["active", "inactive", "pending"]).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided for update.",
   });
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;
