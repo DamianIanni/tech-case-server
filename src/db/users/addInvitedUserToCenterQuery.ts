@@ -5,7 +5,7 @@ export type InvitedUserProps = {
   user_id: string;
   center_id: string;
   role: "admin" | "user" | "employee";
-  status: "pending" | "accepted" | "rejected";
+  status: "active" | "pending" | "rejected";
 };
 
 export const addInvitedUserToCenterQuery = async (props: InvitedUserProps) => {

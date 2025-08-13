@@ -16,6 +16,7 @@ export const authMiddleware = (
     try {
       const decoded = jwt.verify(sessionToken, env.JWT_SECRET);
       req.user = decoded as Partial<User>;
+      console.log("sessionToken", req.user);
       return next(); // Success, user is fully authenticated.
     } catch (error) {
       // Silent failure. If the final token exists but is invalid (e.g., expired),
@@ -41,25 +42,4 @@ export const authMiddleware = (
   return res
     .status(401)
     .json({ message: "Access denied. Authentication required." });
-};
-
-export const authTempMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const token = req.cookies.tempToken;
-
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, env.JWT_TEMP_SECRET);
-
-    req.user = decoded as Partial<User>;
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
-  }
 };

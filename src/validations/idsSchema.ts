@@ -17,6 +17,11 @@ export const centerIdSchema = z.object({
 });
 export type CenterIdInput = z.infer<typeof centerIdSchema>;
 
+export const userIdSchema = z.object({
+  user_id: z.uuid(),
+});
+export type IdInput = z.infer<typeof userIdSchema>;
+
 export const centerIdRoleSchema = z.object({
   center_id: z.uuid(),
   role: z.enum(["employee", "manager", "admin"]),

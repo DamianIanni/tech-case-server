@@ -8,7 +8,7 @@ export const getAllUsersQuery = async (center_id: string) => {
     GET_ALL_USERS_IN_CENTER,
     [center_id]
   );
-  return result;
+  return result.rows;
 };
 
 export const getUserByIdQuery = async (user_id: string) => {

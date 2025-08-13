@@ -10,6 +10,8 @@ export const getMeController = asyncHandler(
     }
     // Maybe center_id
     const { id, first_name, last_name, email, role } = req.user;
+    console.log("LLA", role);
+
     res.status(200).json({ id, first_name, last_name, email, role });
   }
 );

@@ -6,19 +6,16 @@ import { asyncHandler } from "../../utils/asyncHandler";
 
 export const registerInviteUserController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { center_id } = req.params;
-    const { firstName, lastName, email, password, role } = req.body;
-    const user = { firstName, lastName, email, password };
+    const center_id = req.user!.center_id!;
+    const user_invited_id = res.locals.user.id;
+    const { role } = req.body;
+    console.log(user_invited_id);
 
-    const user_id = await registerUserService(user);
-    console.log(user_id);
-
-    // user_id, center_id, role, status
     const result = await addInvitedUserService({
-      user_id,
+      user_id: user_invited_id,
       center_id,
       role,
-      status: "pending",
+      status: "active",
     });
     res.status(201).json(result);
   }

@@ -5,7 +5,7 @@ import { getUserByIdService } from "../../services/user/getUsers";
 
 export const getAllUsersController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { center_id } = req.params;
+    const center_id = req.user!.center_id!;
     const result = await getAllUsersService(center_id);
     res.status(201).json(result);
   }

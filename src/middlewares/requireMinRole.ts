@@ -19,6 +19,7 @@ export const requireMinRole = (requiredRole: UserRole) => {
   return asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const userRole = req.user!.role as UserRole;
+      console.log(userRole);
 
       // Check if user role is valid
       if (!userRole || !(userRole in ROLE_PRIORITY)) {

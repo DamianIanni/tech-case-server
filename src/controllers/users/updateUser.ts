@@ -4,10 +4,12 @@ import { updateUserService } from "../../services/user";
 
 export const updateUserController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { center_id, user_id } = req.params;
-    const updateData = req.body;
+    const { user_id } = req.params;
+    const center_id = req.user?.center_id!;
+    const role = req.body;
+    console.log("UPDATE CONTROLLER", user_id, center_id, role);
 
-    const result = await updateUserService(center_id, user_id, updateData);
+    const result = await updateUserService(center_id, user_id, role);
 
     res.status(200).json(result);
   }
