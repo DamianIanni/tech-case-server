@@ -23,7 +23,7 @@ const centerRouter = Router({ mergeParams: true });
 centerRouter.post(
   "/",
   validateSchemaMiddleware(createCenterSchema, "body"),
-  requireMinRole("admin"),
+  // requireMinRole("admin"),
   createCenterController
 );
 

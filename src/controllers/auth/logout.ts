@@ -12,6 +12,11 @@ export const logoutUserController = asyncHandler(
       secure: env.NODE_ENV === "production",
       sameSite: "strict",
     });
+    res.clearCookie("tempToken", {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
     res.status(200).json({ message: "Successfully logged out" });
   }
 );

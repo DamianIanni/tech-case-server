@@ -11,5 +11,5 @@ export async function registerUserQuery({
   const values = [firstName, lastName, email, password];
 
   const result = await dbpool.query(REGISTER_USER, values);
-  return result.rows[0].id;
+  return result.rows[0];
 }

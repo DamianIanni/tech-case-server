@@ -15,7 +15,7 @@ export const registerInviteUserController = asyncHandler(
       user_id: user_invited_id,
       center_id,
       role,
-      status: "active",
+      status: "pending",
     });
     res.status(201).json(result);
   }
