@@ -5,10 +5,12 @@ import { createNoteService } from "../../services/patient/note";
 
 export const createNoteController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { centerId, patientId } = req.params;
-    const noteData: Partial<Note> = req.body;
+    const { patient_id } = req.params;
+    const noteData = req.body;
+    console.log(patient_id);
+    console.log(noteData);
 
-    const note = await createNoteService(patientId, noteData);
+    const note = await createNoteService(patient_id, noteData);
     res.status(201).json(note);
   }
 );

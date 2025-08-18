@@ -10,11 +10,6 @@ const ROLE_PRIORITY: RolePriority = {
   employee: 1,
 } as const;
 
-/**
- * Middleware factory that creates a middleware to check if the user has at least the required role
- * @param requiredRole - The minimum role required to access the route
- * @returns Middleware function that enforces the role requirement
- */
 export const requireMinRole = (requiredRole: UserRole) => {
   return asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {

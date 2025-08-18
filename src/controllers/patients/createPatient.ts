@@ -5,10 +5,10 @@ import { asyncHandler } from "../../utils/asyncHandler";
 
 export const createPatientController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { centerId } = req.params;
+    const center_id = req.user!.center_id!;
     const patientData: CreatePatientInput = req.body;
 
-    const patient = await createPatientService(patientData, centerId);
+    const patient = await createPatientService(patientData, center_id);
 
     res.status(201).json(patient);
   }

@@ -4,7 +4,7 @@ import { UpdatePatientInput } from "../../validations/patientSchema";
 
 export async function updatePatientQuery(
   patientId: string,
-  updateData: UpdatePatientInput,
+  updateData: UpdatePatientInput
 ) {
   const {
     first_name,
@@ -24,6 +24,8 @@ export async function updatePatientQuery(
     short_description,
     patientId,
   ];
+
+  console.log(values);
 
   const result = await dbpool.query(UPDATE_PATIENT, values);
   return result.rows[0];

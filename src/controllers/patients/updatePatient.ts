@@ -5,10 +5,12 @@ import { asyncHandler } from "../../utils/asyncHandler";
 
 export const updatePatientController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { patientId } = req.params;
+    const { patient_id } = req.params;
+    // const center_id = req.user!.center_id!;
     const updateData: UpdatePatientInput = req.body;
+    console.log(updateData);
 
-    const updatedPatient = await updatePatientService(patientId, updateData);
+    const updatedPatient = await updatePatientService(patient_id, updateData);
 
     if (!updatedPatient) {
       return res.status(404).json({ message: "Patient not found" });

@@ -1,17 +1,10 @@
-export const UPDATE_NOTE = `
-  UPDATE notes 
-  SET 
-    note = COALESCE($1, note),
-    date = COALESCE($2, date),
-  WHERE id = $3 patient_id = $4
-  RETURNING *
-`;
+export const DELETE_NOTE =
+  "DELETE FROM notes WHERE id = $1 AND patient_id = $2";
 
 export const CREATE_NOTE = `
   INSERT INTO notes (
     patient_id,
-    note,
-    date
-  ) VALUES ($1, $2, $3)
+    note
+  ) VALUES ($1, $2)
   RETURNING *
 `;

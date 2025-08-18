@@ -27,3 +27,9 @@ export const centerIdRoleSchema = z.object({
   role: z.enum(["employee", "manager", "admin"]),
 });
 export type CenterIdRoleInput = z.infer<typeof centerIdRoleSchema>;
+
+export const patientIdNoteIdSchema = z.object({
+  patient_id: z.uuid(),
+  note_id: z.uuid(),
+});
+export type PatientIdNoteIdInput = z.infer<typeof patientIdNoteIdSchema>;

@@ -1,29 +1,24 @@
 import { Router } from "express";
 import { validateSchemaMiddleware } from "../../middlewares/validateSchema";
-import { centerPatientIdSchema } from "../../validations/idsSchema";
-import {
-  createNoteSchema,
-  updateNotesSchema,
-} from "../../validations/noteSchema";
+import { patientIdNoteIdSchema } from "../../validations/idsSchema";
+import { patientIdSchema } from "../../validations/patientSchema";
 import {
   createNoteController,
-  updateNoteController,
+  deleteNoteController,
 } from "../../controllers/notes";
 
 const noteRouter = Router({ mergeParams: true });
 
-noteRouter.put(
+noteRouter.post(
   "/",
-  validateSchemaMiddleware(centerPatientIdSchema, "params"),
-  validateSchemaMiddleware(createNoteSchema, "body"),
+  validateSchemaMiddleware(patientIdSchema, "params"),
   createNoteController
 );
 
-noteRouter.patch(
+noteRouter.delete(
   "/:note_id",
-  validateSchemaMiddleware(centerPatientIdSchema, "params"),
-  validateSchemaMiddleware(updateNotesSchema, "body"),
-  updateNoteController
+  validateSchemaMiddleware(patientIdNoteIdSchema, "params"),
+  deleteNoteController
 );
 
 export default noteRouter;

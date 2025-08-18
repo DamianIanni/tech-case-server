@@ -1,4 +1,4 @@
 import { createNoteController } from "./createNote";
-import { updateNoteController } from "./updateNote";
+import { deleteNoteController } from "./deleteNote";
 
-export { createNoteController, updateNoteController };
+export { createNoteController, deleteNoteController };

@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+export const patientIdNoteIdSchema = z.object({
+  patient_id: z.uuid(),
+  note_id: z.uuid(),
+});
+
+export type PatientIdNoteIdInput = z.infer<typeof patientIdNoteIdSchema>;
+
 export const updateNotesSchema = z
   .object({
     date: z.iso.datetime().optional(),

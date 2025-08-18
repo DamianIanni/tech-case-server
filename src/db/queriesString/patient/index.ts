@@ -5,7 +5,7 @@ export const CREATE_PATIENT = `
     email,
     phone,
     date_of_birth,
-    short_description,
+    short_description
   ) VALUES ($1, $2, $3, $4, $5, $6)
   RETURNING *
 `;
@@ -13,7 +13,7 @@ export const CREATE_PATIENT = `
 export const CREATE_PATIENT_IN_CENTER = `
   INSERT INTO patient_centers (
     patient_id,
-    center_id,
+    center_id
   ) VALUES ($1, $2)
   RETURNING *
 `;
@@ -24,8 +24,14 @@ export const DELETE_PATIENT = `
   RETURNING id
 `;
 
+export const DELETE_PATIENT_IN_CENTER = `
+  DELETE FROM patient_centers 
+  WHERE patient_id = $1 AND center_id = $2
+  RETURNING *
+`;
+
 export const GET_PATIENT_BY_ID = `SELECT * FROM full_patient_data_with_notes WHERE patient_id = $1 AND center_id = $2`;
-export const GET_PATIENTS_BY_CENTER_ID = `SELECT * FROM full_patient_data WHERE center_id = $1`;
+export const GET_PATIENTS_BY_CENTER_ID = `SELECT * FROM patients_with_notes WHERE center_id = $1`;
 export const UPDATE_PATIENT = `
   UPDATE patients 
   SET 
@@ -34,7 +40,7 @@ export const UPDATE_PATIENT = `
     email = COALESCE($3, email),
     phone = COALESCE($4, phone),
     date_of_birth = COALESCE($5, date_of_birth),
-    short_description = COALESCE($6, short_description),
+    short_description = COALESCE($6, short_description)
   WHERE id = $7
   RETURNING *
 `;

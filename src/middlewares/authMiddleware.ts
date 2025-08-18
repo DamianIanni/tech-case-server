@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { User } from "../types/users";
+import { User, UsersTableData } from "../types/users";
 import { env } from "../config/env";
 
 export const authMiddleware = (
@@ -15,7 +15,7 @@ export const authMiddleware = (
   if (sessionToken) {
     try {
       const decoded = jwt.verify(sessionToken, env.JWT_SECRET);
-      req.user = decoded as Partial<User>;
+      req.user = decoded as UsersTableData;
       console.log("sessionToken", req.user);
       return next(); // Success, user is fully authenticated.
     } catch (error) {

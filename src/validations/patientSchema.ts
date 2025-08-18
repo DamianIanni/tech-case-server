@@ -23,3 +23,8 @@ export const updatePatientSchema = z
     message: "At least one field must be provided for update.",
   });
 export type UpdatePatientInput = z.infer<typeof updatePatientSchema>;
+
+export const patientIdSchema = z.object({
+  patient_id: z.uuid(),
+});
+export type IdInput = z.infer<typeof patientIdSchema>;

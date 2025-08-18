@@ -3,8 +3,7 @@ import { Note } from "../../../types/note";
 
 export async function createNoteService(
   patientId: string,
-  noteData: Partial<Note>
+  noteData: Pick<Note, "note">
 ) {
-  const { note, date } = noteData;
-  return await createNoteQuery(patientId, note!, date!);
+  return await createNoteQuery(patientId, noteData.note);
 }

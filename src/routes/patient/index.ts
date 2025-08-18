@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { requireMinRole } from "../../middlewares/requireMinRole";
+import { validateSchemaMiddleware } from "../../middlewares/validateSchema";
+import { authorizePatientInCenter } from "../../middlewares/patientInCenter";
 import {
   createPatientController,
   deletePatientController,
@@ -6,58 +9,49 @@ import {
   getPatientController,
   updatePatientController,
 } from "../../controllers/patients";
-import { validateSchemaMiddleware } from "../../middlewares/validateSchema";
 import {
   createPatientSchema,
   updatePatientSchema,
+  patientIdSchema,
 } from "../../validations/patientSchema";
-import { authorizePatientInCenter } from "../../middlewares/patientInCenter";
-import { requireMinRole } from "../../middlewares/requireMinRole";
-import {
-  centerIdSchema,
-  centerPatientIdSchema,
-} from "../../validations/idsSchema";
 import noteRouter from "../note";
 
 // import { authorizeActionInCenterOverPatient } from "../../middlewares/authActionCenterOverPatient";
 
 const patientRouter = Router({ mergeParams: true });
 
-patientRouter.use(requireMinRole("manager"));
-
 patientRouter.use("/:patient_id/notes", noteRouter);
 
 patientRouter.post(
   "/",
-  validateSchemaMiddleware(centerIdSchema, "params"),
   validateSchemaMiddleware(createPatientSchema, "body"),
+  // requireMinRole("manager"),
   createPatientController
 );
 
-patientRouter.get(
-  "/all",
-  validateSchemaMiddleware(centerIdSchema, "params"),
-  getAllPatientsController
-);
+patientRouter.get("/all", getAllPatientsController);
 
 patientRouter.get(
-  "/:user_id",
-  validateSchemaMiddleware(centerPatientIdSchema, "params"),
+  "/:patient_id",
+  validateSchemaMiddleware(patientIdSchema, "params"),
+  requireMinRole("manager"),
   getPatientController
 );
 
-patientRouter.use(authorizePatientInCenter);
-
 patientRouter.delete(
-  "/:pantient_id",
-  validateSchemaMiddleware(centerPatientIdSchema, "params"),
+  "/:patient_id",
+  validateSchemaMiddleware(patientIdSchema, "params"),
+  requireMinRole("manager"),
+  // authorizePatientInCenter,
   deletePatientController
 );
 
 patientRouter.patch(
   "/:patient_id",
-  validateSchemaMiddleware(centerPatientIdSchema, "params"),
+  validateSchemaMiddleware(patientIdSchema, "params"),
   validateSchemaMiddleware(updatePatientSchema, "body"),
+  requireMinRole("manager"),
+  // authorizePatientInCenter,
   updatePatientController
 );
 

@@ -4,20 +4,25 @@ import { asyncHandler } from "../utils/asyncHandler";
 
 export const authorizePatientInCenter = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { center_id, patient_id } = req.params;
+    const { patient_id } = req.params;
+    const center_id = req.user!.center_id;
 
+    if (!center_id) {
+      return res.status(403).json({
+        message: "No center associated with your account",
+      });
+    }
+
+    // Check if the patient exists in the center
     const result = await dbpool.query(
-      `
-      SELECT 1 FROM patient_centers
-      WHERE center_id = $1 AND patient_id = $2
-      `,
-      [center_id, patient_id]
+      "SELECT 1 FROM patient_centers WHERE patient_id = $1 AND center_id = $2",
+      [patient_id, center_id]
     );
 
     if (result.rowCount === 0) {
-      return res
-        .status(404)
-        .json({ message: "Patient not found in this center" });
+      return res.status(403).json({
+        message: "Patient not found in your center",
+      });
     }
 
     next();

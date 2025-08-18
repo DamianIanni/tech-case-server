@@ -1,4 +1,4 @@
-import { updateNoteService } from "./updateNote";
+import { deleteNoteService } from "./deleteNote";
 import { createNoteService } from "./createNote";
 
-export { updateNoteService, createNoteService };
+export { deleteNoteService, createNoteService };
