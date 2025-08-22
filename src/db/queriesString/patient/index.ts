@@ -32,6 +32,7 @@ export const DELETE_PATIENT_IN_CENTER = `
 
 export const GET_PATIENT_BY_ID = `SELECT * FROM full_patient_data_with_notes WHERE patient_id = $1 AND center_id = $2`;
 export const GET_PATIENTS_BY_CENTER_ID = `SELECT * FROM patients_with_notes WHERE center_id = $1`;
+export const GET_ALL_PATIENTS_ID = `SELECT patient_id FROM patient_centers WHERE center_id = $1`;
 export const UPDATE_PATIENT = `
   UPDATE patients 
   SET 

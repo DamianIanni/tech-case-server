@@ -6,7 +6,7 @@ export function buildDynamicUpdate(
   where: { column: string; value: any }
 ) {
   const keys = Object.keys(data);
-  if (keys.length === 0) {
+  if (!keys) {
     throw new Error("No data provided for update");
   }
 

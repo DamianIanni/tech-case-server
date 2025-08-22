@@ -1,20 +1,22 @@
 import { Router } from "express";
 import { getMeController, updateMeController } from "../../controllers/account";
 import { validateSchemaMiddleware } from "../../middlewares/validateSchema";
-import { updateUserSchema } from "../../validations/userSchema";
 import { centerIdSchema } from "../../validations/idsSchema";
 import {
   statusAcceptController,
   statusRejectController,
 } from "../../controllers/account/status";
+import { deleteMeController } from "../../controllers/account/deleteMe";
+import { updateAccountSchema } from "../../validations/accountSchema";
 
 const accountRouter = Router({ mergeParams: true });
 
 // Assumes authentication middleware sets req.user
 accountRouter.get("/me", getMeController);
+
 accountRouter.patch(
   "/me",
-  validateSchemaMiddleware(updateUserSchema, "body"),
+  validateSchemaMiddleware(updateAccountSchema, "body"),
   updateMeController
 );
 
@@ -30,4 +32,5 @@ accountRouter.post(
   statusRejectController
 );
 
+accountRouter.delete("/me", deleteMeController);
 export default accountRouter;

@@ -1,23 +1,20 @@
-import {
-  deletePatientInCenterQuery,
-  deletePatientQuery,
-} from "../../db/patient/deletePatient";
+import { deletePatientQuery } from "../../db/patient/deletePatient";
 import { dbpool } from "../../config/database";
+import { PoolClient } from "pg";
 
 export async function deletePatientService(
   patientId: string,
-  centerId: string
+  transactionClient?: PoolClient
 ) {
-  const client = await dbpool.connect();
+  const client = transactionClient ?? (await dbpool.connect());
   try {
-    client.query("BEGIN");
-    await deletePatientInCenterQuery(client, patientId, centerId);
+    !transactionClient && client.query("BEGIN");
     await deletePatientQuery(client, patientId);
-    client.query("COMMIT");
+    !transactionClient && client.query("COMMIT");
   } catch (error) {
-    client.query("ROLLBACK");
+    !transactionClient && client.query("ROLLBACK");
     throw error;
   } finally {
-    client.release();
+    !transactionClient && client.release();
   }
 }

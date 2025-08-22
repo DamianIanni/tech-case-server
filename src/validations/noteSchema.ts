@@ -18,7 +18,7 @@ export const updateNotesSchema = z
 export type UpdateNotesInput = z.infer<typeof updateNotesSchema>;
 
 export const createNoteSchema = z.object({
-  date: z.iso.datetime(),
+  // date: z.iso.datetime(),
   note: z.string().max(2000),
 });
 export type CreateNoteInput = z.infer<typeof createNoteSchema>;
