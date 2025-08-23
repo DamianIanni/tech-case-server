@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { User, UsersTableData } from "../types/users";
+import { UsersTableData } from "../types/users";
 import { env } from "../config/env";
+import { dbpool } from "../config/database";
 
-export const tempAuthMiddleware = (
+export const tempAuthMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -15,8 +16,23 @@ export const tempAuthMiddleware = (
   if (sessionToken) {
     try {
       const decoded = jwt.verify(sessionToken, env.JWT_SECRET);
+      const query = `
+            SELECT
+              u.id, u.first_name, u.last_name, u.email,
+              uc.role, uc.center_id
+            FROM users u
+            JOIN user_centers uc ON u.id = uc.user_id
+            WHERE u.id = $1 AND uc.center_id = $2;
+          `;
+      const result = await dbpool.query(query, [decoded.id, decoded.center_id]);
+
+      // 3. Si el usuario no se encuentra, la sesión ya no es válida.
+      if (result.rows.length === 0) {
+        // Limpia la cookie por si acaso y devuelve un error
+        res.clearCookie("token");
+        return res.status(401).json({ message: "Invalid session." });
+      }
       req.user = decoded as UsersTableData;
-      console.log("sessionToken", req.user);
       return next(); // Success, user is fully authenticated.
     } catch (error) {
       // Silent failure. If the final token exists but is invalid (e.g., expired),

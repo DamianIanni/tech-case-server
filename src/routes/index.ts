@@ -9,10 +9,10 @@ import { tempAuthMiddleware } from "../middlewares/tempAuthMiddleware";
 const mainRouter = Router({ mergeParams: true });
 
 mainRouter.use("/auth", authRouter);
-mainRouter.use(tempAuthMiddleware);
-mainRouter.use("/account", accountRouter);
-mainRouter.use("/center-selection", tokenRouter);
-mainRouter.use(authMiddleware);
-mainRouter.use("/center", secondRouter);
+// mainRouter.use(tempAuthMiddleware);
+mainRouter.use("/account", tempAuthMiddleware, accountRouter);
+mainRouter.use("/center-selection", tempAuthMiddleware, tokenRouter);
+// mainRouter.use(authMiddleware);
+mainRouter.use("/center", authMiddleware, secondRouter);
 
 export default mainRouter;
