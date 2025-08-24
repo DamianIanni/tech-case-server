@@ -5,14 +5,14 @@ import { dbpool } from "../config/database";
 
 // --- CONFIGURATION ---
 const CONFIG = {
-  NUM_RANDOM_CENTERS: 2, // This number of centers will be created + the main admin center
+  NUM_RANDOM_CENTERS: 4, // This number of centers will be created + the main admin center
   USERS_PER_CENTER: {
-    managers: 4,
-    employees: 8,
+    managers: 14,
+    employees: 28,
   },
   PATIENTS_PER_CENTER: {
-    min: 50,
-    max: 2000,
+    min: 100,
+    max: 4000,
   },
   NOTES_PER_PATIENT: {
     min: 0,

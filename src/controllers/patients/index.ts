@@ -1,6 +1,10 @@
 import { createPatientController } from "./createPatient";
 import { deletePatientController } from "./deletePatient";
-import { getPatientController, getAllPatientsController } from "./getPatients";
+import {
+  getPatientController,
+  getAllPatientsController,
+  getPaginationOrFilteredPatientsController,
+} from "./getPatients";
 import { updatePatientController } from "./updatePatient";
 
 export {
@@ -9,4 +13,5 @@ export {
   getAllPatientsController,
   getPatientController,
   updatePatientController,
+  getPaginationOrFilteredPatientsController,
 };

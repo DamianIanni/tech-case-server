@@ -8,6 +8,7 @@ import {
   getAllPatientsController,
   getPatientController,
   updatePatientController,
+  getPaginationOrFilteredPatientsController,
 } from "../../controllers/patients";
 import {
   createPatientSchema,
@@ -29,7 +30,11 @@ patientRouter.post(
   createPatientController
 );
 
-patientRouter.get("/all", getAllPatientsController);
+patientRouter.get(
+  "/all",
+  getPaginationOrFilteredPatientsController
+  // getAllPatientsController
+);
 
 patientRouter.get(
   "/:patient_id",
