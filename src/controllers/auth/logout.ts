@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { env } from "../../config/env";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const logoutUserController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -17,6 +18,6 @@ export const logoutUserController = asyncHandler(
       secure: env.NODE_ENV === "production",
       sameSite: "strict",
     });
-    res.status(200).json({ message: "Successfully logged out" });
+    sendSuccess(res, { message: "Successfully logged out" });
   }
 );

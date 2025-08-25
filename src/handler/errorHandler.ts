@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { sendError } from "./responseHandler";
 
 interface AppError extends Error {
   statusCode?: number;
@@ -23,11 +24,10 @@ export const errorHandlerMiddleware = (
   const statusCode = err.statusCode || 500;
   const message = err.message || "An unexpected error occurred";
 
+  console.error(
+    `[ERROR] ${new Date().toISOString()} - ${req.method} ${req.originalUrl}`
+  );
   console.error(err.stack);
 
-  res.status(statusCode).json({
-    status: "error",
-    statusCode,
-    message,
-  });
+  sendError(res, message, statusCode);
 };

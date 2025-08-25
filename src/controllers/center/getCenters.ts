@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getAllCentersService, getCenterService } from "../../services/center";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { centerContextService } from "../../services/helpers/centerContext";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const getAllCentersController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -10,10 +11,10 @@ export const getAllCentersController = asyncHandler(
 
     const centerContext = await centerContextService(user_id);
     if (!centerContext.length) {
-      return res.status(200).json([]);
+      return sendSuccess(res, []);
     }
 
-    res.status(200).json(centerContext);
+    sendSuccess(res, centerContext);
   }
 );
 
@@ -25,9 +26,9 @@ export const getCenterController = asyncHandler(
     const center = await getCenterService(center_id, user_id);
 
     if (!center) {
-      return res.status(200).json(null);
+      return sendSuccess(res, null);
     }
 
-    res.status(200).json(center[0]);
+    sendSuccess(res, center[0]);
   }
 );

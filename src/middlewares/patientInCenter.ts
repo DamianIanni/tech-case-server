@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { dbpool } from "../config/database";
 import { asyncHandler } from "../utils/asyncHandler";
+import { sendError } from "../handler/responseHandler";
 
 export const authorizePatientInCenter = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -8,9 +9,7 @@ export const authorizePatientInCenter = asyncHandler(
     const center_id = req.user!.center_id;
 
     if (!center_id) {
-      return res.status(403).json({
-        message: "No center associated with your account",
-      });
+      return sendError(res, "No center associated with your account", 403);
     }
 
     // Check if the patient exists in the center
@@ -20,9 +19,7 @@ export const authorizePatientInCenter = asyncHandler(
     );
 
     if (result.rowCount === 0) {
-      return res.status(403).json({
-        message: "Patient not found in your center",
-      });
+      return sendError(res, "Patient not found in your center", 403);
     }
 
     next();

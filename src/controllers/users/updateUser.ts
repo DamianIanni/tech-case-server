@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { updateUserService } from "../../services/user";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const updateUserController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -11,6 +12,6 @@ export const updateUserController = asyncHandler(
 
     const result = await updateUserService(center_id, user_id, role);
 
-    res.status(200).json(result);
+    sendSuccess(res, result);
   }
 );

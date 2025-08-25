@@ -3,6 +3,7 @@ import { InviteUserInput } from "../../validations/userSchema";
 import { registerUserService } from "../../services/auth";
 import { addInvitedUserService } from "../../services/user";
 import { asyncHandler } from "../../utils/asyncHandler";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const registerInviteUserController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -17,6 +18,6 @@ export const registerInviteUserController = asyncHandler(
       role,
       status: "pending",
     });
-    res.status(201).json(result);
+    sendSuccess(res, result, 201);
   }
 );

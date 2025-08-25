@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { deletePatientService } from "../../services/patient";
 import { asyncHandler } from "../../utils/asyncHandler";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const deletePatientController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -9,6 +10,6 @@ export const deletePatientController = asyncHandler(
 
     await deletePatientService(patient_id);
 
-    res.status(200).json({ message: "Patient deleted successfully" });
+    sendSuccess(res, { message: "Patient deleted successfully" });
   }
 );

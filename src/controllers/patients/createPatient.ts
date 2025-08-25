@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CreatePatientInput } from "../../validations/patientSchema";
 import { createPatientService } from "../../services/patient";
 import { asyncHandler } from "../../utils/asyncHandler";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const createPatientController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -10,6 +11,6 @@ export const createPatientController = asyncHandler(
 
     const patient = await createPatientService(patientData, center_id);
 
-    res.status(201).json(patient);
+    sendSuccess(res, patient, 201);
   }
 );

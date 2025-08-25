@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { findUserByEmailQuery } from "../db/helpers/findUserByEmailQuery";
+import { sendError } from "../handler/responseHandler";
 
 /**
  * Middleware to check if a user exists in the database by email
@@ -13,15 +14,13 @@ export const userExistsByEmail = asyncHandler(
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return sendError(res, "Email is required", 400);
     }
 
     const user = await findUserByEmailQuery(email);
 
     if (!user || !user.rows || user.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "User not found with the provided email" });
+      return sendError(res, "User not found with the provided email", 404);
     }
 
     // Attach user to res.locals for use in subsequent middleware/controllers

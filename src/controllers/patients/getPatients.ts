@@ -5,6 +5,7 @@ import {
 } from "../../services/patient";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { getPaginationOrFilteredPatientsService } from "../../services/patient/getPatients";
+import { sendSuccess, sendError } from "../../handler/responseHandler";
 
 export const getPatientController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -14,10 +15,10 @@ export const getPatientController = asyncHandler(
     const patient = await getPatientService(patient_id, center_id);
 
     if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
+      return sendError(res, "Patient not found", 404);
     }
 
-    res.status(200).json(patient);
+    sendSuccess(res, patient);
   }
 );
 
@@ -27,10 +28,10 @@ export const getAllPatientsController = asyncHandler(
     const patients = await getAllPatientsService(center_id);
 
     if (!patients.length) {
-      return res.status(200).json([]);
+      return sendSuccess(res, []);
     }
 
-    res.status(200).json(patients);
+    sendSuccess(res, patients);
   }
 );
 
@@ -48,8 +49,6 @@ export const getPaginationOrFilteredPatientsController = asyncHandler(
       searchTerm
     );
 
-    console.log("PAGINATION", result);
-
-    res.status(200).json(result);
+    sendSuccess(res, result);
   }
 );

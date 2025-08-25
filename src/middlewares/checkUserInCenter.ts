@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { findUserInCenterQuery } from "../db/helpers/findUserInCenterQuery";
+import { sendSuccess } from "../handler/responseHandler";
 
 /**
  * Middleware to check if a user exists in the user_centers table for a specific center
@@ -17,7 +18,7 @@ export const checkUserInCenter = asyncHandler(
 
     if (userCenter.rowCount && userCenter.rowCount > 0) {
       // If user exists in center, return
-      return res.status(200).json({ message: "User already exists in center" });
+      return sendSuccess(res, { message: "User already exists in center" });
     }
 
     // Continue to the next middleware if it does not exists in center
@@ -34,9 +35,7 @@ export const checkUserInCenterToContinue = asyncHandler(
 
     if (!userCenter.rowCount || userCenter.rowCount === 0) {
       // If user does not exists in center, return
-      return res
-        .status(200)
-        .json({ message: "User does not exists in center" });
+      return sendSuccess(res, { message: "User does not exists in center" });
     }
 
     // Continue to the next middleware if user exists in center

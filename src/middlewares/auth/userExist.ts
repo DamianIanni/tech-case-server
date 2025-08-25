@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { findUserByEmail } from "../../services/helpers/findUserByEmail";
+import { sendError } from "../../handler/responseHandler";
 
 export const userExistMiddleware = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +10,7 @@ export const userExistMiddleware = asyncHandler(
     const user = await findUserByEmail(email);
 
     if (user.rowCount! > 0) {
-      return res.status(409).json({ message: "User already exists" }); // 409 Conflict
+      return sendError(res, "User already exists", 409); // 409 Conflict
     }
 
     next();

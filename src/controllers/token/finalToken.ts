@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { generateToken } from "../../utils/auth/generateToken";
 import { env } from "../../config/env";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const finalTokenController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -21,6 +22,6 @@ export const finalTokenController = asyncHandler(
     });
 
     res.clearCookie("tempToken");
-    res.status(200).json({ message: "Token generated successfully" });
+    sendSuccess(res, { message: "Token generated successfully" });
   }
 );

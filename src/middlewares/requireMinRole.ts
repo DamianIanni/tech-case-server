@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { UserRole } from "../types/users";
+import { sendError } from "../handler/responseHandler";
 
 type RolePriority = Record<UserRole, number>;
 
@@ -18,18 +19,12 @@ export const requireMinRole = (requiredRole: UserRole) => {
 
       // Check if user role is valid
       if (!userRole || !(userRole in ROLE_PRIORITY)) {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid user role",
-        });
+        return sendError(res, "Invalid user role", 403);
       }
 
       // Check if user has sufficient privileges
       if (ROLE_PRIORITY[userRole] < ROLE_PRIORITY[requiredRole]) {
-        return res.status(403).json({
-          success: false,
-          message: `Insufficient privileges. Required role: ${requiredRole}`,
-        });
+        return sendError(res, `Insufficient privileges. Required role: ${requiredRole}`, 403);
       }
 
       // User has required role, proceed to next middleware

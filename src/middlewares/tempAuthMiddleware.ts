@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { UsersTableData } from "../types/users";
 import { env } from "../config/env";
 import { dbpool } from "../config/database";
+import { sendError } from "../handler/responseHandler";
 
 export const tempAuthMiddleware = async (
   req: Request,
@@ -15,7 +16,7 @@ export const tempAuthMiddleware = async (
   //   1. Priority #1: Try with the final session token
   if (sessionToken) {
     try {
-      const decoded = jwt.verify(sessionToken, env.JWT_SECRET);
+      const decoded = jwt.verify(sessionToken, env.JWT_SECRET) as any;
       const query = `
             SELECT
               u.id, u.first_name, u.last_name, u.email,
@@ -30,7 +31,7 @@ export const tempAuthMiddleware = async (
       if (result.rows.length === 0) {
         // Limpia la cookie por si acaso y devuelve un error
         res.clearCookie("token");
-        return res.status(401).json({ message: "Invalid session." });
+        return sendError(res, "Invalid session.", 401);
       }
       req.user = decoded as UsersTableData;
       return next(); // Success, user is fully authenticated.
@@ -43,19 +44,15 @@ export const tempAuthMiddleware = async (
   //   2. Priority #2: If there was no session token or it failed, try with the temporary token
   if (tempToken) {
     try {
-      const decoded = jwt.verify(tempToken, env.JWT_TEMP_SECRET);
-      req.user = decoded as Partial<UsersTableData>;
+      const decoded = jwt.verify(tempToken, env.JWT_TEMP_SECRET) as any;
+      req.user = decoded;
       return next(); // Success, user is in the intermediate step.
     } catch (error) {
       // If this also fails, now it's a definitive error.
-      return res
-        .status(401)
-        .json({ message: "Invalid or expired temporary token" });
+      return sendError(res, "Invalid or expired temporary token", 401);
     }
   }
 
   // 3. If no token was found in cookies, deny access.
-  return res
-    .status(401)
-    .json({ message: "Access denied. Authentication required." });
+  return sendError(res, "Access denied. Authentication required.", 401);
 };

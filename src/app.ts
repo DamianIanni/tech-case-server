@@ -3,7 +3,7 @@ import cors from "cors";
 // import dotenv from "dotenv";
 import "./config/env";
 import { loggerMiddleware } from "./middlewares/logger";
-import { errorHandlerMiddleware } from "./middlewares/errorHandler";
+import { errorHandlerMiddleware } from "./handler/errorHandler";
 import mainRouter from "./routes";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env";

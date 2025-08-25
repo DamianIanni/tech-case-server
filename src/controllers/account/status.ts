@@ -4,13 +4,14 @@ import {
   acceptStatusQuery,
   rejectStatusQuery,
 } from "../../db/helpers/changeStatusQuery";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const statusAcceptController = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req!.user!;
     const { center_id } = req.params;
     const result = await acceptStatusQuery(id!, center_id!);
-    res.status(200).json(result);
+    sendSuccess(res, result);
   }
 );
 
@@ -19,6 +20,6 @@ export const statusRejectController = asyncHandler(
     const { id } = req!.user!;
     const { center_id } = req.params;
     const result = await rejectStatusQuery(id!, center_id!);
-    res.status(200).json(result);
+    sendSuccess(res, result);
   }
 );

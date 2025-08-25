@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { User, UsersTableData } from "../types/users";
 import { dbpool } from "../config/database";
 import { env } from "../config/env";
+import { sendError } from "../handler/responseHandler";
 
 export const authMiddleware = async (
   req: Request,
@@ -15,7 +16,7 @@ export const authMiddleware = async (
   // 1. Priority #1: Try with the final session token
   if (sessionToken) {
     try {
-      const decoded = jwt.verify(sessionToken, env.JWT_SECRET);
+      const decoded = jwt.verify(sessionToken, env.JWT_SECRET) as any;
       console.log("decoded", decoded);
 
       const query = `
@@ -31,7 +32,7 @@ export const authMiddleware = async (
       if (result.rows.length === 0) {
         // Limpia la cookie por si acaso y devuelve un error
         res.clearCookie("token");
-        return res.status(401).json({ message: "Invalid session." });
+        return sendError(res, "Invalid session.", 401);
       }
       req.user = decoded as UsersTableData;
       return next(); // Success, user is fully authenticated.
@@ -41,7 +42,5 @@ export const authMiddleware = async (
     }
   }
 
-  return res
-    .status(401)
-    .json({ message: "Access denied. Authentication required." });
+  return sendError(res, "Access denied. Authentication required.", 401);
 };

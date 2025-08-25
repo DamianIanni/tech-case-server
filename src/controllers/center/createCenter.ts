@@ -3,6 +3,7 @@ import { CreateCenterInput } from "../../validations/centerSchema";
 import { createCenterService } from "../../services/center";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { insertUserCenterService } from "../../services/center/createCenter";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const createCenterController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -10,6 +11,6 @@ export const createCenterController = asyncHandler(
     const center = { name, address, phone };
     const center_id = await createCenterService(center);
     await insertUserCenterService(center_id, req.user!.id!);
-    res.status(201).json(center_id);
+    sendSuccess(res, center_id, 201);
   }
 );

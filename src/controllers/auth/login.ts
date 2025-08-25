@@ -3,6 +3,7 @@ import { User } from "../../types/users";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { generateTempToken } from "../../utils/auth/generateToken";
 import { env } from "../../config/env";
+import { sendSuccess } from "../../handler/responseHandler";
 // import { centerContextService } from "../../services/helpers/centerContext";
 
 export const loginUserController = asyncHandler(
@@ -20,8 +21,9 @@ export const loginUserController = asyncHandler(
       // sameSite: "none",
       maxAge: 5 * 60 * 1000, // 1 day in ms
     });
-    res.status(200).json({
-      // centerContext,
+    sendSuccess(res, {
+      message: "Login successful",
+      user: { id, first_name, last_name, email }
     });
   }
 );

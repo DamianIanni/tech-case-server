@@ -9,5 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./src/@types"]
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["__tests__", "**/*.test.ts", "**/*.spec.ts"]
 }

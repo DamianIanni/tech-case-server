@@ -2,6 +2,7 @@ import { deleteMeService } from "../../services/account/deleteMe";
 import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { env } from "../../config/env";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const deleteMeController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -16,6 +17,6 @@ export const deleteMeController = asyncHandler(
       secure: env.NODE_ENV === "production",
       sameSite: "strict",
     });
-    res.status(200).json(deleted);
+    sendSuccess(res, deleted);
   }
 );

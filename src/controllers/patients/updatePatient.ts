@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UpdatePatientInput } from "../../validations/patientSchema";
 import { updatePatientService } from "../../services/patient";
 import { asyncHandler } from "../../utils/asyncHandler";
+import { sendSuccess, sendError } from "../../handler/responseHandler";
 
 export const updatePatientController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -13,9 +14,9 @@ export const updatePatientController = asyncHandler(
     const updatedPatient = await updatePatientService(patient_id, updateData);
 
     if (!updatedPatient) {
-      return res.status(404).json({ message: "Patient not found" });
+      return sendError(res, "Patient not found", 404);
     }
 
-    res.status(200).json(updatedPatient);
+    sendSuccess(res, updatedPatient);
   }
 );

@@ -1,6 +1,7 @@
 // src/middlewares/validateSchemaMiddleware.ts
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema, ZodError } from "zod";
+import { sendError } from "../handler/responseHandler";
 
 export const validateSchemaMiddleware = (
   schema: ZodSchema,
@@ -10,7 +11,7 @@ export const validateSchemaMiddleware = (
     const result = schema.safeParse(req[source]);
     if (!result.success) {
       const zodError = result.error as ZodError;
-      return res.status(400).json({ error: zodError.issues[0].message });
+      return sendError(res, zodError.issues[0].message, 400);
     }
     // Overwrite the validated data back to request to ensure correct typing
     req[source] = result.data as any;

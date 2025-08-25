@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { deleteNoteService } from "../../services/patient/note";
+import { sendSuccess } from "../../handler/responseHandler";
 
 export const deleteNoteController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -8,6 +9,6 @@ export const deleteNoteController = asyncHandler(
 
     const updatedNote = await deleteNoteService(note_id, patient_id);
 
-    res.status(200).json(updatedNote);
+    sendSuccess(res, updatedNote);
   }
 );
