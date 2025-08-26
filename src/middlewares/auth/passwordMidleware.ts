@@ -3,6 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler";
 import { findUserByEmailQuery } from "../../db/helpers/findUserByEmailQuery";
 import bcrypt from "bcrypt";
 import { sendError } from "../../handler/responseHandler";
+import { AppErrorCode } from "../../constants/errorCodes";
 
 export const passwordMiddlewareHandler = async (
   req: Request,
@@ -13,12 +14,12 @@ export const passwordMiddlewareHandler = async (
   const user = await findUserByEmailQuery(email);
 
   if (!user || !user.rows || !user.rows[0]) {
-    return sendError(res, "Invalid credentials", 401);
+    return sendError(res, "Invalid credentials", 401, AppErrorCode.AUTH_INVALID_CREDENTIALS);
   }
 
   const isMatch = await bcrypt.compare(password, user.rows[0].password);
   if (!isMatch) {
-    return sendError(res, "Invalid credentials", 401);
+    return sendError(res, "Invalid credentials", 401, AppErrorCode.AUTH_INVALID_CREDENTIALS);
   }
 
   const localUser = {

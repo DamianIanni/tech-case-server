@@ -35,7 +35,7 @@ export const checkUserInCenterToContinue = asyncHandler(
 
     if (!userCenter.rowCount || userCenter.rowCount === 0) {
       // If user does not exists in center, return
-      return sendSuccess(res, { message: "User does not exists in center" });
+      return sendSuccess(res, { message: "User does not exist in center" });
     }
 
     // Continue to the next middleware if user exists in center

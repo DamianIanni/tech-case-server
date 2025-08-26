@@ -4,6 +4,7 @@ import { UsersTableData } from "../types/users";
 import { env } from "../config/env";
 import { dbpool } from "../config/database";
 import { sendError } from "../handler/responseHandler";
+import { AppErrorCode } from "../constants/errorCodes";
 
 export const tempAuthMiddleware = async (
   req: Request,
@@ -31,7 +32,7 @@ export const tempAuthMiddleware = async (
       if (result.rows.length === 0) {
         // Limpia la cookie por si acaso y devuelve un error
         res.clearCookie("token");
-        return sendError(res, "Invalid session.", 401);
+        return sendError(res, "Invalid session.", 401, AppErrorCode.AUTH_SESSION_INVALID);
       }
       req.user = decoded as UsersTableData;
       return next(); // Success, user is fully authenticated.
@@ -49,10 +50,10 @@ export const tempAuthMiddleware = async (
       return next(); // Success, user is in the intermediate step.
     } catch (error) {
       // If this also fails, now it's a definitive error.
-      return sendError(res, "Invalid or expired temporary token", 401);
+      return sendError(res, "Invalid or expired temporary token", 401, AppErrorCode.AUTH_TOKEN_INVALID);
     }
   }
 
   // 3. If no token was found in cookies, deny access.
-  return sendError(res, "Access denied. Authentication required.", 401);
+  return sendError(res, "Access denied. Authentication required.", 401, AppErrorCode.AUTH_ACCESS_DENIED);
 };

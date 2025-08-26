@@ -3,6 +3,7 @@ import { UpdatePatientInput } from "../../validations/patientSchema";
 import { updatePatientService } from "../../services/patient";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { sendSuccess, sendError } from "../../handler/responseHandler";
+import { AppErrorCode } from "../../constants/errorCodes";
 
 export const updatePatientController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -14,7 +15,7 @@ export const updatePatientController = asyncHandler(
     const updatedPatient = await updatePatientService(patient_id, updateData);
 
     if (!updatedPatient) {
-      return sendError(res, "Patient not found", 404);
+      return sendError(res, "Patient not found", 404, AppErrorCode.PATIENT_NOT_FOUND);
     }
 
     sendSuccess(res, updatedPatient);

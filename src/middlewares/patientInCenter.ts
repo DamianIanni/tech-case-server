@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { dbpool } from "../config/database";
 import { asyncHandler } from "../utils/asyncHandler";
 import { sendError } from "../handler/responseHandler";
+import { AppErrorCode } from "../constants/errorCodes";
 
 export const authorizePatientInCenter = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +10,7 @@ export const authorizePatientInCenter = asyncHandler(
     const center_id = req.user!.center_id;
 
     if (!center_id) {
-      return sendError(res, "No center associated with your account", 403);
+      return sendError(res, "No center associated with your account", 403, AppErrorCode.CENTER_NO_ASSOCIATION);
     }
 
     // Check if the patient exists in the center
@@ -19,7 +20,7 @@ export const authorizePatientInCenter = asyncHandler(
     );
 
     if (result.rowCount === 0) {
-      return sendError(res, "Patient not found in your center", 403);
+      return sendError(res, "Patient not found in your center", 403, AppErrorCode.PATIENT_NOT_IN_CENTER);
     }
 
     next();

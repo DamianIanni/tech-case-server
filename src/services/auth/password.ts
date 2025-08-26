@@ -7,6 +7,8 @@ import {
 } from "../../db/auth/passwordQuery";
 import { generateResetToken } from "../../utils/auth/generateToken";
 import { hashPassword } from "../../utils/auth/hashPassword";
+import { ApiError } from "../../utils/errors/ApiError";
+import { AppErrorCode } from "../../constants/errorCodes";
 
 export const forgotPasswaordService = async (email: string) => {
   const user = await findUserByEmailPasswordQuery(email);
@@ -31,7 +33,7 @@ export const resetPasswordService = async (token: string, password: string) => {
   const _token = await findTokenQuery(token);
   console.log("__TOKEN ", _token);
   if (!_token) {
-    throw new Error("Token not found or expired");
+    throw ApiError.badRequest(undefined, AppErrorCode.PASSWORD_RESET_TOKEN_INVALID);
   }
 
   const hashedPassword = await hashPassword(password);

@@ -6,6 +6,7 @@ import {
 import { asyncHandler } from "../../utils/asyncHandler";
 import { getPaginationOrFilteredPatientsService } from "../../services/patient/getPatients";
 import { sendSuccess, sendError } from "../../handler/responseHandler";
+import { AppErrorCode } from "../../constants/errorCodes";
 
 export const getPatientController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -15,7 +16,7 @@ export const getPatientController = asyncHandler(
     const patient = await getPatientService(patient_id, center_id);
 
     if (!patient) {
-      return sendError(res, "Patient not found", 404);
+      return sendError(res, "Patient not found", 404, AppErrorCode.PATIENT_NOT_FOUND);
     }
 
     sendSuccess(res, patient);

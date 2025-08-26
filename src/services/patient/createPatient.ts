@@ -5,6 +5,8 @@ import {
   createPatientInCenterQuery,
 } from "../../db/patient/createPatient";
 import { findPatientInCenter } from "../../db/helpers/findPatientInCenter";
+import { ApiError } from "../../utils/errors/ApiError";
+import { AppErrorCode } from "../../constants/errorCodes";
 
 export async function createPatientService(
   patientData: CreatePatientInput,
@@ -28,7 +30,7 @@ export async function createPatientService(
 
     // Si la consulta devuelve una fila, el paciente ya existe en este centro.
     if (duplicateResult.rowCount && duplicateResult.rowCount > 0) {
-      throw new Error("Ya existe un paciente con este email en tu centro."); // 409 Conflict
+      throw ApiError.conflict(undefined, AppErrorCode.PATIENT_EMAIL_DUPLICATE);
     }
 
     const newPatientResult = await createPatientQuery(client, patientData);
