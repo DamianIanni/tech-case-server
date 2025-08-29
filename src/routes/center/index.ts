@@ -20,12 +20,12 @@ import { requireMinRole } from "../../middlewares/requireMinRole";
 
 const centerRouter = Router({ mergeParams: true });
 
-centerRouter.post(
-  "/",
-  validateSchemaMiddleware(createCenterSchema, "body"),
-  // requireMinRole("admin"),
-  createCenterController
-);
+// centerRouter.post(
+//   "/",
+//   validateSchemaMiddleware(createCenterSchema, "body"),
+//   // requireMinRole("admin"),
+//   createCenterController
+// );
 
 centerRouter.get(
   "/all-centers",
