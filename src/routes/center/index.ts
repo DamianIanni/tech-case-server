@@ -1,38 +1,18 @@
 import { Router } from "express";
 import {
-  createCenterController,
   deleteCenterController,
   getCenterController,
   getAllCentersController,
   updateCenterController,
 } from "../../controllers/center";
 import { validateSchemaMiddleware } from "../../middlewares/validateSchema";
-import {
-  createCenterSchema,
-  updateCenterSchema,
-} from "../../validations/centerSchema";
-import {
-  centerUserIdSchema,
-  centerIdSchema,
-} from "../../validations/idsSchema";
-import { authorizeAdminInCenter } from "../../middlewares/authAdminInCenter";
+import { updateCenterSchema } from "../../validations/centerSchema";
+import { centerIdSchema } from "../../validations/idsSchema";
 import { requireMinRole } from "../../middlewares/requireMinRole";
 
 const centerRouter = Router({ mergeParams: true });
 
-// centerRouter.post(
-//   "/",
-//   validateSchemaMiddleware(createCenterSchema, "body"),
-//   // requireMinRole("admin"),
-//   createCenterController
-// );
-
-centerRouter.get(
-  "/all-centers",
-  // requireMinRole("employee"),
-  //   validateSchemaMiddleware(centerIdSchema, "params"),
-  getAllCentersController
-);
+centerRouter.get("/all-centers", getAllCentersController);
 
 centerRouter.patch(
   "/:center_id",

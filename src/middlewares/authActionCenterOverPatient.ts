@@ -4,7 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 
 export const authorizeActionInCenterOverPatient = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req!.user!.id; // del token
+    const userId = req!.user!.id;
     const { centerId, patientId } = req.params;
 
     const result = await dbpool.query(

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
-import { Note } from "../../types/note";
 import { createNoteService } from "../../services/patient/note";
 import { sendSuccess } from "../../handler/responseHandler";
 

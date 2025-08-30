@@ -1,8 +1,5 @@
 import { dbpool } from "../../config/database";
 
-//just in case
-//"SELECT u.id, u.first_name, u.last_name, u.email, u.password, uc.role FROM users u LEFT JOIN user_centers uc ON u.id = uc.user_id WHERE u.email = $1"
-
 export const findUserByEmailQuery = async (
   email: string,
   register?: boolean

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllCentersService, getCenterService } from "../../services/center";
+import { getCenterService } from "../../services/center";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { centerContextService } from "../../services/helpers/centerContext";
 import { sendSuccess } from "../../handler/responseHandler";
@@ -7,7 +7,6 @@ import { sendSuccess } from "../../handler/responseHandler";
 export const getAllCentersController = asyncHandler(
   async (req: Request, res: Response) => {
     const user_id = req.user!.id!;
-    // const centers = await getAllCentersService(user_id);
 
     const centerContext = await centerContextService(user_id);
     if (!centerContext.length) {

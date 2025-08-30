@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { InviteUserInput } from "../../validations/userSchema";
-import { registerUserService } from "../../services/auth";
 import { addInvitedUserService } from "../../services/user";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { sendSuccess } from "../../handler/responseHandler";

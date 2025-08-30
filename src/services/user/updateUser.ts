@@ -1,4 +1,3 @@
-import { dbpool } from "../../config/database";
 import { buildDynamicUpdate } from "../../utils/buildDynamicUpdate";
 import { hashPassword } from "../../utils/auth/hashPassword";
 import { updateUserQuery } from "../../db/users/uptadeUserquery";

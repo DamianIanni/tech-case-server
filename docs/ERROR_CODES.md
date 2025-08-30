@@ -24,6 +24,7 @@ All API errors now follow this standardized format:
 ## Available Error Codes
 
 ### Generic Errors
+
 - `INTERNAL_SERVER_ERROR` - An unexpected error occurred
 - `VALIDATION_FAILED` - Validation failed
 - `RESOURCE_NOT_FOUND` - Resource not found
@@ -31,6 +32,7 @@ All API errors now follow this standardized format:
 - `FORBIDDEN` - Access forbidden
 
 ### Authentication Errors
+
 - `AUTH_INVALID_CREDENTIALS` - Invalid credentials
 - `AUTH_EMAIL_IN_USE` - Email already in use
 - `AUTH_USER_NOT_FOUND` - User not found with the provided email
@@ -41,10 +43,12 @@ All API errors now follow this standardized format:
 - `AUTH_ACCESS_DENIED` - Access denied. Authentication required
 
 ### Password Reset Errors
+
 - `PASSWORD_RESET_TOKEN_INVALID` - Invalid or expired password reset token
 - `PASSWORD_RESET_TOKEN_EXPIRED` - Password reset token has expired
 
 ### Center Related Errors
+
 - `CENTER_NOT_FOUND` - Center not found
 - `CENTER_USER_NOT_MEMBER` - User is not a member of this center
 - `CENTER_INSUFFICIENT_PERMISSIONS` - Insufficient permissions for this center
@@ -53,32 +57,38 @@ All API errors now follow this standardized format:
 - `CENTER_NO_ASSOCIATION` - No center associated with your account
 
 ### Patient Related Errors
+
 - `PATIENT_NOT_FOUND` - Patient not found
 - `PATIENT_EMAIL_DUPLICATE` - A patient with this email already exists in your center
 - `PATIENT_NOT_IN_CENTER` - Patient not found in your center
 - `PATIENT_ACCESS_DENIED` - Access denied for this patient
 
 ### User Related Errors
+
 - `USER_NOT_FOUND` - User not found
 - `USER_ALREADY_EXISTS` - User already exists
 - `USER_INVALID_ROLE` - Invalid user role
 - `USER_INSUFFICIENT_PRIVILEGES` - Insufficient privileges
 
 ### Account Related Errors
+
 - `ACCOUNT_NOT_FOUND` - Account not found
 - `ACCOUNT_UPDATE_FAILED` - Failed to update account
 
 ### Note Related Errors
+
 - `NOTE_NOT_FOUND` - Note not found
 - `NOTE_ACCESS_DENIED` - Access denied for this note
 
 ### Validation Specific Errors
+
 - `EMAIL_REQUIRED` - Email is required
 - `EMAIL_INVALID` - Invalid email format
 - `PASSWORD_TOO_SHORT` - Password must be at least 6 characters
 - `REQUIRED_FIELD_MISSING` - Required field is missing
 
 ### Role and Permission Errors
+
 - `ROLE_INVALID` - Invalid role
 - `ROLE_INSUFFICIENT` - Insufficient role privileges
 - `PERMISSION_DENIED` - Permission denied
@@ -88,14 +98,19 @@ All API errors now follow this standardized format:
 ### In Services (Throwing Errors)
 
 ```typescript
-import { ApiError } from '../utils/errors/ApiError';
-import { AppErrorCode } from '../constants/errorCodes';
+import { ApiError } from "../utils/errors/ApiError";
+import { AppErrorCode } from "../constants/errorCodes";
 
 // Throw a specific error with code
 throw ApiError.conflict(undefined, AppErrorCode.PATIENT_EMAIL_DUPLICATE);
 
 // Or use constructor for custom scenarios
-throw new ApiError(400, "Custom message", AppErrorCode.VALIDATION_FAILED, additionalDetails);
+throw new ApiError(
+  400,
+  "Custom message",
+  AppErrorCode.VALIDATION_FAILED,
+  additionalDetails
+);
 
 // Use static methods for common scenarios
 throw ApiError.notFound(); // 404 with RESOURCE_NOT_FOUND code
@@ -106,14 +121,20 @@ throw ApiError.forbidden(); // 403 with FORBIDDEN code
 ### In Middleware (Direct Response)
 
 ```typescript
-import { sendError } from '../handler/responseHandler';
-import { AppErrorCode } from '../constants/errorCodes';
+import { sendError } from "../handler/responseHandler";
+import { AppErrorCode } from "../constants/errorCodes";
 
 // Send error with specific code
 return sendError(res, "Patient not found", 404, AppErrorCode.PATIENT_NOT_FOUND);
 
 // With additional details
-return sendError(res, "Validation failed", 400, AppErrorCode.VALIDATION_FAILED, validationErrors);
+return sendError(
+  res,
+  "Validation failed",
+  400,
+  AppErrorCode.VALIDATION_FAILED,
+  validationErrors
+);
 ```
 
 ### Error Handling Middleware
@@ -142,17 +163,17 @@ Frontend applications can now handle errors consistently:
 // Frontend error handling example
 const handleApiError = (error) => {
   switch (error.code) {
-    case 'AUTH_INVALID_CREDENTIALS':
-      showToast('Invalid email or password');
+    case "AUTH_INVALID_CREDENTIALS":
+      showToast("Invalid email or password");
       break;
-    case 'PATIENT_EMAIL_DUPLICATE':
-      showFormError('email', 'A patient with this email already exists');
+    case "PATIENT_EMAIL_DUPLICATE":
+      showFormError("email", "A patient with this email already exists");
       break;
-    case 'AUTH_SESSION_INVALID':
+    case "AUTH_SESSION_INVALID":
       redirectToLogin();
       break;
     default:
-      showToast('An unexpected error occurred');
+      showToast("An unexpected error occurred");
   }
 };
 ```
@@ -179,12 +200,12 @@ Example:
 // In errorCodes.ts
 export enum AppErrorCode {
   // ... existing codes
-  NEW_BUSINESS_ERROR = 'NEW_BUSINESS_ERROR',
+  NEW_BUSINESS_ERROR = "NEW_BUSINESS_ERROR",
 }
 
 export const ErrorMessages: Record<AppErrorCode, string> = {
   // ... existing messages
-  [AppErrorCode.NEW_BUSINESS_ERROR]: 'This is a new business error',
+  [AppErrorCode.NEW_BUSINESS_ERROR]: "This is a new business error",
 };
 
 // In your service

@@ -1,17 +1,13 @@
 import { Request, Response } from "express";
-import { User } from "../../types/users";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { generateTempToken } from "../../utils/auth/generateToken";
 import { env } from "../../config/env";
 import { sendSuccess } from "../../handler/responseHandler";
-// import { centerContextService } from "../../services/helpers/centerContext";
 
 export const loginUserController = asyncHandler(
   async (req: Request, res: Response) => {
     const { id, first_name, last_name, email } = res.locals.user;
     const tempToken = generateTempToken({ id, first_name, last_name, email });
-
-    // const centerContext = await centerContextService(id);
 
     res.cookie("tempToken", tempToken, {
       httpOnly: true,
@@ -23,7 +19,7 @@ export const loginUserController = asyncHandler(
     });
     sendSuccess(res, {
       message: "Login successful",
-      user: { id, first_name, last_name, email }
+      user: { id, first_name, last_name, email },
     });
   }
 );

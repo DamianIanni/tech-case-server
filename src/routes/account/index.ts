@@ -11,7 +11,6 @@ import { updateAccountSchema } from "../../validations/accountSchema";
 
 const accountRouter = Router({ mergeParams: true });
 
-// Assumes authentication middleware sets req.user
 accountRouter.get("/me", getMeController);
 
 accountRouter.patch(

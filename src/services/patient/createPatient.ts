@@ -4,7 +4,6 @@ import {
   createPatientQuery,
   createPatientInCenterQuery,
 } from "../../db/patient/createPatient";
-import { findPatientInCenter } from "../../db/helpers/findPatientInCenter";
 import { ApiError } from "../../utils/errors/ApiError";
 import { AppErrorCode } from "../../constants/errorCodes";
 

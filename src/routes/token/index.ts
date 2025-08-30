@@ -12,9 +12,4 @@ tokenRouter.post(
   finalTokenController
 );
 
-tokenRouter.get(
-  "/all-centers",
-  // requireMinRole("employee"),
-  //   validateSchemaMiddleware(centerIdSchema, "params"),
-  getAllCentersController
-);
+tokenRouter.get("/all-centers", getAllCentersController);

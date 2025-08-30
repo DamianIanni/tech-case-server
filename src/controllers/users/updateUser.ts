@@ -8,7 +8,6 @@ export const updateUserController = asyncHandler(
     const { user_id } = req.params;
     const center_id = req.user?.center_id!;
     const role = req.body;
-    console.log("UPDATE CONTROLLER", user_id, center_id, role);
 
     const result = await updateUserService(center_id, user_id, role);
 

@@ -8,8 +8,6 @@ import {
 } from "../../services/helpers/getMassiveHelper";
 import { deleteMeQuery } from "../../db/account/deleteMeQuery";
 
-// ... (importa tus funciones de DB)
-
 export async function deleteMeService(userId: string) {
   const client = await dbpool.connect();
   try {

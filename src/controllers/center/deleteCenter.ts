@@ -12,8 +12,6 @@ export const deleteCenterController = asyncHandler(
     const result = await deleteCenterService(center_id);
     const tempToken = generateTempToken({ id, first_name, last_name, email });
 
-    // const centerContext = await centerContextService(id);
-
     res.cookie("tempToken", tempToken, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",

@@ -56,11 +56,9 @@ export const resetPasswordQuery = async (user_id: string, password: string) => {
  * @returns A promise that resolves to the token record if found
  */
 export const findTokenQuery = async (token: string) => {
-  console.log("TOKEN EN LA QUERy", token);
   const result = await dbpool.query(
     "SELECT * FROM password_reset_tokens WHERE token = $1 AND expires_at > NOW()",
     [token]
   );
-  console.log("TOKEN EN LA QUERy", result);
   return result.rows[0];
 };

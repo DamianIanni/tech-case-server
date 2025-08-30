@@ -4,7 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 
 export const authorizeAdminInCenter = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req!.user!.id; // del token
+    const userId = req!.user!.id;
     const { center_id } = req.params;
 
     const result = await dbpool.query(
@@ -30,7 +30,6 @@ export const authorizeAdminInCenter = asyncHandler(
         .json({ message: "Only admins can perform this action" });
     }
 
-    // Attach info al request si necesitás
     req.auth = { role, center_id };
     next();
   }

@@ -25,8 +25,6 @@ export async function updatePatientQuery(
     patientId,
   ];
 
-  console.log(values);
-
   const result = await dbpool.query(UPDATE_PATIENT, values);
   return result.rows[0];
 }

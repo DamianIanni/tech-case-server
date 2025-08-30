@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { User, UsersTableData } from "../types/users";
+import { UsersTableData } from "../types/users";
 import { dbpool } from "../config/database";
 import { env } from "../config/env";
 import { sendError } from "../handler/responseHandler";
@@ -11,8 +11,7 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const sessionToken = req.cookies.token; // Your final session token
-  // const tempToken = req.cookies.tempToken;
+  const sessionToken = req.cookies.token;
 
   // 1. Priority #1: Try with the final session token
   if (sessionToken) {
@@ -33,7 +32,12 @@ export const authMiddleware = async (
       if (result.rows.length === 0) {
         // Limpia la cookie por si acaso y devuelve un error
         res.clearCookie("token");
-        return sendError(res, "Invalid session.", 401, AppErrorCode.AUTH_SESSION_INVALID);
+        return sendError(
+          res,
+          "Invalid session.",
+          401,
+          AppErrorCode.AUTH_SESSION_INVALID
+        );
       }
       req.user = decoded as UsersTableData;
       return next(); // Success, user is fully authenticated.
@@ -43,5 +47,10 @@ export const authMiddleware = async (
     }
   }
 
-  return sendError(res, "Access denied. Authentication required.", 401, AppErrorCode.AUTH_ACCESS_DENIED);
+  return sendError(
+    res,
+    "Access denied. Authentication required.",
+    401,
+    AppErrorCode.AUTH_ACCESS_DENIED
+  );
 };

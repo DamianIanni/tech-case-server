@@ -6,7 +6,6 @@ import { sendSuccess } from "../../handler/responseHandler";
 export const updateMeController = asyncHandler(
   async (req: Request, res: Response) => {
     const { first_name, last_name } = req.body;
-    console.log("DATA 1", req.body);
     const updated = await updateMeService(req.user!.id!, {
       first_name,
       last_name,

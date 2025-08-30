@@ -14,7 +14,7 @@ export const forgotPasswaordService = async (email: string) => {
   const user = await findUserByEmailPasswordQuery(email);
   if (!user) {
     console.log(
-      `Solicitud de reseteo para email no existente: ${email}. Respondiendo con éxito para evitar enumeración.`
+      `Password reset request for non-existent email: ${email}. Responding with success to prevent user enumeration.`
     );
     return;
   }
@@ -22,18 +22,20 @@ export const forgotPasswaordService = async (email: string) => {
   const token = generateResetToken({ userId: user_id });
   await insertResetTokenQuery(user_id, token);
 
-  // (Simulación de email)
-  console.log(`--- SIMULACIÓN DE EMAIL ---`);
-  console.log(`Para: ${user.email}`);
-  console.log(`Token de reseteo: ${token}`);
+  // (Email simulation)
+  console.log(`--- EMAIL SIMULATION ---`);
+  console.log(`To: ${user.email}`);
+  console.log(`Reset token: ${token}`);
   console.log(`-------------------------`);
 };
 
 export const resetPasswordService = async (token: string, password: string) => {
   const _token = await findTokenQuery(token);
-  console.log("__TOKEN ", _token);
   if (!_token) {
-    throw ApiError.badRequest(undefined, AppErrorCode.PASSWORD_RESET_TOKEN_INVALID);
+    throw ApiError.badRequest(
+      undefined,
+      AppErrorCode.PASSWORD_RESET_TOKEN_INVALID
+    );
   }
 
   const hashedPassword = await hashPassword(password);

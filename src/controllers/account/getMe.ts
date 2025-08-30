@@ -8,7 +8,6 @@ export const getMeController = asyncHandler(
     if (!req.user) {
       return sendError(res, "Unauthorized", 401, AppErrorCode.UNAUTHORIZED);
     }
-    // Maybe center_id
     const { id, first_name, last_name, email, role } = req.user;
 
     sendSuccess(res, { id, first_name, last_name, email, role });
