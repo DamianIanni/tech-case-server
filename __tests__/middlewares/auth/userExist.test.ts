@@ -14,7 +14,13 @@ describe('userExistMiddleware', () => {
     const next = jest.fn();
     await userExistMiddleware(req, res, next);
     expect(res.statusCode).toBe(409);
-    expect(res._getJSONData()).toMatchObject({ message: 'User already exists' });
+    expect(res._getJSONData()).toMatchObject({ 
+      status: 'error',
+      error: {
+        message: 'User already exists',
+        code: 'USER_ALREADY_EXISTS'
+      }
+    });
     expect(next).not.toHaveBeenCalled();
   });
 

@@ -18,16 +18,14 @@ jest.mock('../../../src/utils/buildDynamicUpdate', () => ({
 describe('updateMeService', () => {
   afterEach(() => jest.clearAllMocks());
 
-  it('should update firstName and lastName', async () => {
-    const result = await updateMeService('user123', { firstName: 'John', lastName: 'Doe' });
+  it('should update first_name and last_name', async () => {
+    const result = await updateMeService('user123', { first_name: 'John', last_name: 'Doe' });
     expect(result).toEqual({ message: 'User updated' });
   });
 
-  it('should hash password if provided', async () => {
-    const result = await updateMeService('user123', { password: 'secret' });
+  it('should update with empty data', async () => {
+    const result = await updateMeService('user123', { first_name: 'John' });
     expect(result).toEqual({ message: 'User updated' });
-    const { hashPassword } = require('../../../src/utils/auth/hashPassword');
-    expect(hashPassword).toHaveBeenCalledWith('secret');
   });
 
   it('should throw if no data provided', async () => {

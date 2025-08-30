@@ -38,6 +38,7 @@ describe('registerUserService', () => {
       firstName: 'Jane',
       lastName: 'Smith',
       email: 'jane@example.com',
+      password: undefined as any,
     })).rejects.toThrow();
   });
 });

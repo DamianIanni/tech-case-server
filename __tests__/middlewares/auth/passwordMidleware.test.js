@@ -1,52 +1,150 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const passwordMidleware_1 = require("../../../src/middlewares/auth/passwordMidleware");
-const node_mocks_http_1 = __importDefault(require("node-mocks-http"));
-const bcrypt = require('bcrypt');
-const findUserByEmailQuery_1 = require("../../../src/db/helpers/findUserByEmailQuery");
-const mockedFindUserByEmailQuery = findUserByEmailQuery_1.findUserByEmailQuery;
+
+// Mock dependencies before importing any modules
 jest.mock('../../../src/db/helpers/findUserByEmailQuery');
-jest.mock('bcrypt', () => ({
-    __esModule: true,
-    default: { compare: jest.fn() }
-}));
-const mockedBcrypt = bcrypt;
-beforeEach(() => {
-    jest.clearAllMocks();
-});
+jest.mock('bcrypt');
+
+// Import dependencies after mocking
+const httpMocks = require('node-mocks-http');
+const { passwordMiddlewareHandler } = require('../../../src/middlewares/auth/passwordMidleware');
+const { findUserByEmailQuery } = require('../../../src/db/helpers/findUserByEmailQuery');
+const bcrypt = require('bcrypt');
+
 describe('passwordMiddleware', () => {
-    it('should call next if credentials are valid', async () => {
-        mockedFindUserByEmailQuery.mockResolvedValueOnce({ rows: [{ password: 'hashed', email: 'test@test.com', id: 1, first_name: 'Test', last_name: 'User' }], command: '', rowCount: 1, oid: 0, fields: [] });
-        bcrypt.default.compare.mockResolvedValueOnce(true);
-        const req = node_mocks_http_1.default.createRequest({ body: { email: 'test@test.com', password: 'pass' } });
-        const res = node_mocks_http_1.default.createResponse();
-        const next = jest.fn();
-        await (0, passwordMidleware_1.passwordMiddlewareHandler)(req, res, next);
-        expect(next).toHaveBeenCalled();
-        expect(res.locals.user).toBeDefined();
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should call next if credentials are valid', async () => {
+    // Mock user data
+    const mockUser = {
+      rows: [{
+        id: 1,
+        email: 'test@test.com',
+        password: 'hashedPassword',
+        first_name: 'Test',
+        last_name: 'User'
+      }],
+      rowCount: 1
+    };
+
+    // Setup mocks
+    findUserByEmailQuery.mockImplementation((email) => {
+      return Promise.resolve(mockUser);
     });
-    it('should return 401 if user not found', async () => {
-        mockedFindUserByEmailQuery.mockResolvedValueOnce(null);
-        const req = node_mocks_http_1.default.createRequest({ body: { email: 'notfound@test.com', password: 'pass' } });
-        const res = node_mocks_http_1.default.createResponse();
-        const next = jest.fn();
-        await (0, passwordMidleware_1.passwordMiddlewareHandler)(req, res, next);
-        expect(res.statusCode).toBe(401);
-        expect(res._getJSONData()).toMatchObject({ message: 'Invalid credentials' });
-        expect(next).not.toHaveBeenCalled();
+    
+    bcrypt.compare = jest.fn().mockImplementation((password, hash) => {
+      return Promise.resolve(true);
     });
-    it('should return 401 if password does not match', async () => {
-        mockedFindUserByEmailQuery.mockResolvedValueOnce({ rows: [{ password: 'hashed' }], command: '', rowCount: 1, oid: 0, fields: [] });
-        bcrypt.default.compare.mockResolvedValueOnce(false);
-        const req = node_mocks_http_1.default.createRequest({ body: { email: 'test@test.com', password: 'wrong' } });
-        const res = node_mocks_http_1.default.createResponse();
-        const next = jest.fn();
-        await (0, passwordMidleware_1.passwordMiddlewareHandler)(req, res, next);
-        expect(res.statusCode).toBe(401);
-        expect(res._getJSONData()).toMatchObject({ message: 'Invalid credentials' });
-        expect(next).not.toHaveBeenCalled();
+
+    // Setup request and response
+    const req = httpMocks.createRequest({
+      method: 'POST',
+      body: {
+        email: 'test@test.com',
+        password: 'password123'
+      }
     });
+    const res = httpMocks.createResponse();
+    const next = jest.fn();
+
+    // Call the middleware
+    await passwordMiddlewareHandler(req, res, next);
+
+    // Assertions
+    expect(findUserByEmailQuery).toHaveBeenCalledWith('test@test.com');
+    expect(bcrypt.compare).toHaveBeenCalledWith('password123', 'hashedPassword');
+    expect(next).toHaveBeenCalled();
+    expect(res.locals.user).toEqual({
+      id: 1,
+      email: 'test@test.com',
+      first_name: 'Test',
+      last_name: 'User'
+    });
+  });
+
+  it('should return 401 if user not found', async () => {
+    // Setup mocks
+    findUserByEmailQuery.mockImplementation((email) => {
+      return Promise.resolve(null);
+    });
+
+    // Setup request and response
+    const req = httpMocks.createRequest({
+      method: 'POST',
+      body: {
+        email: 'nonexistent@test.com',
+        password: 'password123'
+      }
+    });
+    const res = httpMocks.createResponse();
+    const next = jest.fn();
+
+    // Call the middleware
+    await passwordMiddlewareHandler(req, res, next);
+
+    // Assertions
+    expect(findUserByEmailQuery).toHaveBeenCalledWith('nonexistent@test.com');
+    expect(bcrypt.compare).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
+    expect(res.statusCode).toBe(401);
+    expect(res._getJSONData()).toEqual({
+      status: 'error',
+      error: {
+        message: 'Invalid credentials',
+        code: 'AUTH_INVALID_CREDENTIALS'
+      }
+    });
+  });
+
+  it('should return 401 if password does not match', async () => {
+    // Mock user data
+    const mockUser = {
+      rows: [{
+        id: 1,
+        email: 'test@test.com',
+        password: 'hashedPassword',
+        first_name: 'Test',
+        last_name: 'User'
+      }],
+      rowCount: 1
+    };
+
+    // Setup mocks
+    findUserByEmailQuery.mockImplementation((email) => {
+      return Promise.resolve(mockUser);
+    });
+    
+    bcrypt.compare = jest.fn().mockImplementation((password, hash) => {
+      return Promise.resolve(false);
+    });
+
+    // Setup request and response
+    const req = httpMocks.createRequest({
+      method: 'POST',
+      body: {
+        email: 'test@test.com',
+        password: 'wrongpassword'
+      }
+    });
+    const res = httpMocks.createResponse();
+    const next = jest.fn();
+
+    // Call the middleware
+    await passwordMiddlewareHandler(req, res, next);
+
+    // Assertions
+    expect(findUserByEmailQuery).toHaveBeenCalledWith('test@test.com');
+    expect(bcrypt.compare).toHaveBeenCalledWith('wrongpassword', 'hashedPassword');
+    expect(next).not.toHaveBeenCalled();
+    expect(res.statusCode).toBe(401);
+    expect(res._getJSONData()).toEqual({
+      status: 'error',
+      error: {
+        message: 'Invalid credentials',
+        code: 'AUTH_INVALID_CREDENTIALS'
+      }
+    });
+  });
 });
+

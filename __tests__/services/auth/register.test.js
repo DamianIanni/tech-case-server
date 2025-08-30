@@ -3,15 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const register_1 = require("../../../src/services/auth/register");
 const hashPassword_1 = require("../../../src/utils/auth/hashPassword");
 const registerUserQuery_1 = require("../../../src/db/auth/registerUserQuery");
-jest.mock('../../../src/utils/auth/hashPassword');
-jest.mock('../../../src/db/auth/registerUserQuery');
+const { mockFunction } = require('../../testUtils');
 describe('registerUserService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
     it('should hash the password and call registerUserQuery with hashed password', async () => {
-        hashPassword_1.hashPassword.mockResolvedValue('hashedpass');
-        registerUserQuery_1.registerUserQuery.mockResolvedValue({ success: true });
+        mockFunction(hashPassword_1, 'hashPassword', 'hashedpass');
+        mockFunction(registerUserQuery_1, 'registerUserQuery', { success: true });
         const props = {
             firstName: 'John',
             lastName: 'Doe',

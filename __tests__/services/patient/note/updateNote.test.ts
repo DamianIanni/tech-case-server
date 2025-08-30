@@ -1,7 +1,14 @@
+// Mock environment variables
+process.env.JWT_TEMP_SECRET = 'test-temp-secret';
+process.env.JWT_RESET_SECRET = 'test-reset-secret';
+process.env.JWT_SECRET = 'test-secret';
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
+
+// Mock modules
+jest.mock("../../../../src/db/note");
+
 import { updateNoteService } from "../../../../src/services/patient/note/deleteNote";
 import { updateNoteQuery } from "../../../../src/db/note";
-
-jest.mock("../../../../src/db/note");
 
 describe("updateNoteService", () => {
   afterEach(() => {

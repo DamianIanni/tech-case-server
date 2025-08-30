@@ -8,3 +8,12 @@ export const CREATE_NOTE = `
   ) VALUES ($1, $2)
   RETURNING *
 `;
+
+export const UPDATE_NOTE = `
+  UPDATE notes
+  SET
+    note = $3,
+    date = COALESCE($4, date)
+  WHERE id = $1 AND patient_id = $2
+  RETURNING *
+`;

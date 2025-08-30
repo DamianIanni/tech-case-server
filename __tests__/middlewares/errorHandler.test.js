@@ -20,8 +20,10 @@ describe("errorHandlerMiddleware", () => {
         expect(res.statusCode).toBe(400);
         expect(res._getJSONData()).toMatchObject({
             status: "error",
-            statusCode: 400,
-            message: "Test error",
+            error: {
+                message: "Test error",
+                code: expect.any(String),
+            }
         });
     });
 });

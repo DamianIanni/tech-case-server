@@ -1,21 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import { authorizePatientInCenter } from "../../src/middlewares/patientInCenter";
 import { dbpool } from "../../src/config/database";
+import { UsersTableData } from "../../src/types/users";
 
 // Mock the database pool
 jest.mock("../../src/config/database");
 
 // Mock the asyncHandler
 const mockAsyncHandler = (fn: any) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await fn(req, res, next);
+    } catch (error) {
+      next(error);
+    }
   };
 
 // Mock the database query
 const mockQuery = dbpool.query as jest.Mock;
 
 describe("authorizePatientInCenter Middleware", () => {
-  let req: Partial<Request>;
+  let req: Partial<Request> & { user?: UsersTableData };
   let res: Partial<Response>;
   let next: jest.Mock;
 
@@ -26,7 +31,12 @@ describe("authorizePatientInCenter Middleware", () => {
       },
       user: {
         id: "user-789",
+        first_name: "Test",
+        last_name: "User",
+        email: "test@example.com",
+        password: "hashedpassword",
         role: "admin",
+        status: "active",
         center_id: "center-456",
       },
     };
@@ -45,7 +55,12 @@ describe("authorizePatientInCenter Middleware", () => {
     // Create a new user object without center_id
     req.user = { 
       id: "user-789",
+      first_name: "Test",
+      last_name: "User",
+      email: "test@example.com",
+      password: "hashedpassword",
       role: "admin",
+      status: "active",
       center_id: "" // Empty string to simulate no center
     };
 
@@ -61,7 +76,11 @@ describe("authorizePatientInCenter Middleware", () => {
 
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({
-      message: "No center associated with your account",
+      status: "error",
+      error: {
+        message: "No center associated with your account",
+        code: "CENTER_NO_ASSOCIATION"
+      }
     });
     expect(next).not.toHaveBeenCalled();
   });
@@ -98,7 +117,11 @@ describe("authorizePatientInCenter Middleware", () => {
     );
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Patient not found in your center",
+      status: "error",
+      error: {
+        message: "Patient not found in your center",
+        code: "PATIENT_NOT_IN_CENTER"
+      }
     });
     expect(next).not.toHaveBeenCalled();
   });
@@ -107,12 +130,21 @@ describe("authorizePatientInCenter Middleware", () => {
     const error = new Error("Database error");
     mockQuery.mockRejectedValueOnce(error);
 
-    await expect(
-      mockAsyncHandler(authorizePatientInCenter) (
-        req as Request,
-        res as Response,
-        next
-      )
-    ).rejects.toThrow(error);
+    // Create a promise that resolves when next is called with an error
+    const nextPromise = new Promise((resolve) => {
+      next.mockImplementation((err) => {
+        resolve(err);
+      });
+    });
+
+    // Call the middleware
+    await mockAsyncHandler(authorizePatientInCenter)(
+      req as Request,
+      res as Response,
+      next
+    );
+
+    // Expect next to have been called with the error
+    expect(next).toHaveBeenCalledWith(error);
   });
 });

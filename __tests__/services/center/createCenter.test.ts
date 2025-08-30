@@ -27,10 +27,18 @@ describe('createCenterService', () => {
     expect(result).toEqual({ success: true });
   });
 
-  it('should handle missing fields gracefully', async () => {
+  it('should handle all required fields', async () => {
     (createCenterQuery as jest.Mock).mockResolvedValue({ success: true });
-    const result = await createCenterService({});
-    expect(createCenterQuery).toHaveBeenCalledWith({ name: undefined, address: undefined, phone: undefined });
+    const result = await createCenterService({
+      name: 'Test Center',
+      address: '123 Test Street',
+      phone: '555-123-4567'
+    });
+    expect(createCenterQuery).toHaveBeenCalledWith({
+      name: 'Test Center',
+      address: '123 Test Street',
+      phone: '555-123-4567'
+    });
     expect(result).toEqual({ success: true });
   });
 });

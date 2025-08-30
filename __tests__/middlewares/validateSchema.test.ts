@@ -3,7 +3,7 @@ import httpMocks from 'node-mocks-http';
 
 describe('validateSchemaMiddleware', () => {
   it('should call next if schema is valid', () => {
-    const schema = { validate: jest.fn().mockReturnValue({}) };
+    const schema = { safeParse: jest.fn().mockReturnValue({ success: true, data: {} }) };
     const req = httpMocks.createRequest({ body: {} });
     const res = httpMocks.createResponse();
     const next = jest.fn();
@@ -12,13 +12,24 @@ describe('validateSchemaMiddleware', () => {
   });
 
   it('should return 400 if schema is invalid', () => {
-    const schema = { validate: jest.fn().mockReturnValue({ error: { details: [{ message: 'Invalid' }] } }) };
+    const schema = { safeParse: jest.fn().mockReturnValue({ 
+      success: false, 
+      error: { 
+        issues: [{ message: 'Invalid' }] 
+      } 
+    }) };
     const req = httpMocks.createRequest({ body: {} });
     const res = httpMocks.createResponse();
     const next = jest.fn();
     validateSchemaMiddleware(schema as any, 'body')(req, res, next);
     expect(res.statusCode).toBe(400);
-    expect(res._getJSONData()).toMatchObject({ error: 'Invalid' });
+    expect(res._getJSONData()).toMatchObject({ 
+      status: 'error',
+      error: {
+        message: 'Invalid',
+        code: 'VALIDATION_FAILED'
+      }
+    });
     expect(next).not.toHaveBeenCalled();
   });
 });
