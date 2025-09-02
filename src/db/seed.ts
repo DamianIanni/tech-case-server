@@ -19,6 +19,8 @@ const CONFIG = {
     max: 5,
   },
   DEMO_ADMIN_EMAIL: "demo@admin.com",
+  DEMO_MANAGER_EMAIL: "demo@manager.com",
+  DEMO_EMPLOYEE_EMAIL: "demo@employee.com",
   DEMO_PASSWORD: "password123",
 };
 
@@ -78,6 +80,24 @@ async function main() {
         "id"
       )
     )[0];
+    const demoManager = (
+      await bulkInsert(
+        client,
+        "users",
+        ["first_name", "last_name", "email", "password"],
+        [["Demo", "Manager", CONFIG.DEMO_MANAGER_EMAIL, hashedPassword]],
+        "id"
+      )
+    )[0];
+    const demoEmployee = (
+      await bulkInsert(
+        client,
+        "users",
+        ["first_name", "last_name", "email", "password"],
+        [["Demo", "Employee", CONFIG.DEMO_EMPLOYEE_EMAIL, hashedPassword]],
+        "id"
+      )
+    )[0];
     const versatileUser = (
       await bulkInsert(
         client,
@@ -125,6 +145,8 @@ async function main() {
     console.log("🔗 Linking users to centers...");
     let userCenterLinks: any[] = [
       [demoAdmin.id, mainCenter.id, "admin"], // Admin owns the main center
+      [demoManager.id, mainCenter.id, "manager"], // Demo Manager in the main center
+      [demoEmployee.id, mainCenter.id, "employee"], // Demo Employee in the main center
       [versatileUser.id, mainCenter.id, "manager"], // Versatile user is a manager in the main center
     ];
 
@@ -281,6 +303,14 @@ async function main() {
     console.log(`   Email: ${CONFIG.DEMO_ADMIN_EMAIL}`);
     console.log(`   Password: ${CONFIG.DEMO_PASSWORD}`);
     console.log("---");
+    console.log("🔑 Demo Manager account credentials:");
+    console.log(`   Email: ${CONFIG.DEMO_MANAGER_EMAIL}`);
+    console.log(`   Password: ${CONFIG.DEMO_PASSWORD}`);
+    console.log("---");
+    console.log("🔑 Demo Employee account credentials:");
+    console.log(`   Email: ${CONFIG.DEMO_EMPLOYEE_EMAIL}`);
+    console.log(`   Password: ${CONFIG.DEMO_PASSWORD}`);
+    console.log("---");
 
     if (otherAdminsCredentials.length > 0) {
       console.log("🔑 Credentials for other admins (generated randomly):");
@@ -301,150 +331,3 @@ async function main() {
 }
 
 main();
-//           client,
-//           "users",
-//           ["first_name", "last_name", "email", "password"],
-//           [
-//             [
-//               faker.person.firstName(),
-//               faker.person.lastName(),
-//               faker.internet.email(),
-//               hashedPassword,
-//             ],
-//           ],
-//           "id"
-//         )
-//       )[0];
-//       userCenterLinks.push([newAdmin.id, center.id, "admin"]);
-//       // Make the versatile user also an employee in other centers
-//       userCenterLinks.push([versatileUser.id, center.id, "employee"]);
-//     }
-
-//     for (const center of allCenters) {
-//       console.log(`👥 Creating and linking team for ${center.name}...`);
-//       const managersData = Array.from(
-//         { length: CONFIG.USERS_PER_CENTER.managers },
-//         () => [
-//           faker.person.firstName(),
-//           faker.person.lastName(),
-//           faker.internet.email(),
-//           hashedPassword,
-//         ]
-//       );
-//       const employeesData = Array.from(
-//         { length: CONFIG.USERS_PER_CENTER.employees },
-//         () => [
-//           faker.person.firstName(),
-//           faker.person.lastName(),
-//           faker.internet.email(),
-//           hashedPassword,
-//         ]
-//       );
-
-//       const createdManagers = await bulkInsert(
-//         client,
-//         "users",
-//         ["first_name", "last_name", "email", "password"],
-//         managersData
-//       );
-//       const createdEmployees = await bulkInsert(
-//         client,
-//         "users",
-//         ["first_name", "last_name", "email", "password"],
-//         employeesData
-//       );
-
-//       createdManagers.forEach((user) =>
-//         userCenterLinks.push([user.id, center.id, "manager"])
-//       );
-//       createdEmployees.forEach((user) =>
-//         userCenterLinks.push([user.id, center.id, "employee"])
-//       );
-
-//       const numPatients = getRandomInt(
-//         CONFIG.PATIENTS_PER_CENTER.min,
-//         CONFIG.PATIENTS_PER_CENTER.max
-//       );
-//       console.log(
-//         `👨‍👩‍👧‍👦 Creando y vinculando ${numPatients} pacientes para ${center.name}...`
-//       );
-//       const patientsData = Array.from({ length: numPatients }, () => [
-//         faker.person.firstName(),
-//         faker.person.lastName(),
-//         faker.internet.email(),
-//         faker.phone.number().replace(/\D/g, ""),
-//         faker.date.birthdate(),
-//       ]);
-//       const createdPatients = await bulkInsert(
-//         client,
-//         "patients",
-//         ["first_name", "last_name", "email", "phone", "date_of_birth"],
-//         patientsData
-//       );
-
-//       const patientCenterLinks = createdPatients.map((p) => [
-//         p.id,
-//         center.id,
-//         faker.lorem.words(getRandomInt(2, 5)),
-//       ]);
-//       await bulkInsert(
-//         client,
-//         "patient_centers",
-//         ["patient_id", "center_id"],
-//         patientCenterLinks,
-//         "patient_id"
-//       );
-
-//       let notesData: any[] = [];
-//       for (const patient of createdPatients) {
-//         const numNotes = getRandomInt(
-//           CONFIG.NOTES_PER_PATIENT.min,
-//           CONFIG.NOTES_PER_PATIENT.max
-//         );
-//         for (let j = 0; j < numNotes; j++) {
-//           notesData.push([
-//             patient.id,
-//             center.id,
-//             faker.lorem.paragraph(),
-//             faker.date.past(),
-//           ]);
-//         }
-//       }
-//       if (notesData.length > 0) {
-//         await bulkInsert(
-//           client,
-//           "notes",
-//           ["patient_id", "center_id", "note", "date"],
-//           notesData,
-//           "id"
-//         );
-//       }
-//     }
-
-//     console.log("🔗 Aplicando todos los vínculos de usuarios...");
-//     await bulkInsert(
-//       client,
-//       "user_centers",
-//       ["user_id", "center_id", "role"],
-//       userCenterLinks,
-//       "user_id"
-//     );
-
-//     await client.query("COMMIT");
-//     console.log("✅ Seeding completado exitosamente.");
-//     console.log("---");
-//     console.log("🔑 Credenciales de la cuenta Demo Admin:");
-//     console.log(`   Email: ${CONFIG.DEMO_ADMIN_EMAIL}`);
-//     console.log(`   Password: ${CONFIG.DEMO_PASSWORD}`);
-//     console.log("---");
-//   } catch (error) {
-//     await client.query("ROLLBACK");
-//     console.error("❌ Error durante el seeding:", error);
-//     process.exit(1);
-//   } finally {
-//     client.release();
-//     await dbpool.end();
-//   }
-// }
-
-// main();
