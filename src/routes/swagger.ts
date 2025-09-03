@@ -43,7 +43,7 @@ const options = {
     './src/routes/*.ts', 
     './src/routes/*/*.ts',
     './src/routes/*.swagger.ts',
-    './src/routes/*/*swagger.ts'
+    './src/routes/*/*.swagger.ts'
   ],
 };
 
