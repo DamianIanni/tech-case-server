@@ -139,7 +139,7 @@ npm install
 cat > .env.development << EOF
 NODE_ENV=development
 PORT=4000
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/medical_crm
+DATABASE_URL=Example
 JWT_SECRET=dev_jwt_secret
 JWT_TEMP_SECRET=dev_temp_secret
 JWT_RESET_SECRET=dev_reset_secret
