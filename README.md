@@ -137,12 +137,12 @@ npm install
 
 # 2. Create environment file
 cat > .env.development << EOF
-NODE_ENV=development
+NODE_ENV=example_development
 PORT=4000
 DATABASE_URL=Example
-JWT_SECRET=dev_jwt_secret
-JWT_TEMP_SECRET=dev_temp_secret
-JWT_RESET_SECRET=dev_reset_secret
+JWT_SECRET=Example
+JWT_TEMP_SECRET=Example
+JWT_RESET_SECRET=Example
 JWT_EXPIRES_IN=1h
 JWT_TEMP_EXPIRES_IN=5m
 CORS_ORIGIN=http://localhost:3000
