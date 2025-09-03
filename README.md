@@ -279,3 +279,7 @@ npm run test:all   # Run Jest test suite
 ## About This Project
 
 Built with ❤️ using modern Node.js technologies. This project demonstrates production-ready backend development skills suitable for enterprise healthcare applications.
+
+## Related Projects
+
+- **Frontend Repository**: [https://github.com/DamianIanni/crm-medical-app](https://github.com/DamianIanni/crm-medical-app) - The React frontend application for this medical CRM system
