@@ -9,7 +9,6 @@ export const updatePatientController = asyncHandler(
   async (req: Request, res: Response) => {
     const { patient_id } = req.params;
     const updateData: UpdatePatientInput = req.body;
-    console.log(updateData);
 
     const updatedPatient = await updatePatientService(patient_id, updateData);
 

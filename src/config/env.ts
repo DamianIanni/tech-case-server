@@ -1,17 +1,4 @@
 import { z } from "zod";
-// Using Node.js built-in dotenv loader (v20+)
-import path from "path";
-
-// Load environment variables from the appropriate .env file
-const envFile = `.env.${process.env.NODE_ENV || "development"}`;
-const envPath = path.resolve(process.cwd(), envFile);
-
-// Load variables into process.env using native Node.js method
-// @ts-ignore – Type definitions may not yet include this experimental API
-(process as any).loadEnvFile?.(envPath) ??
-  console.warn(
-    "process.loadEnvFile is unavailable. Ensure you are running Node.js v20+"
-  );
 
 // Define the schema for environment variables
 const envSchema = z.object({
@@ -32,7 +19,7 @@ const envSchema = z.object({
   JWT_RESET_SECRET: z.string().min(2), // dev porpuse only
 
   // CORS
-  CORS_ORIGIN: z.string().url().default("http://localhost:3000"),
+  CORS_ORIGIN: z.url().default("http://localhost:3000"),
 
   // Optional variables with defaults
   LOG_LEVEL: z.enum(["error", "warn", "info", "http", "debug"]).default("info"),
@@ -44,8 +31,6 @@ const validateEnv = () => {
   try {
     const envVars = process.env;
     const validatedEnv = envSchema.parse(envVars);
-
-    console.log(`✅ Environment variables loaded successfully from ${envFile}`);
     return validatedEnv;
   } catch (error) {
     if (error instanceof z.ZodError) {

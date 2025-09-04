@@ -8,7 +8,6 @@ export const registerInviteUserController = asyncHandler(
     const center_id = req.user!.center_id!;
     const user_invited_id = res.locals.user.id;
     const { role } = req.body;
-    console.log(user_invited_id);
 
     const result = await addInvitedUserService({
       user_id: user_invited_id,

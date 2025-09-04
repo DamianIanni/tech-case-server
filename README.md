@@ -53,15 +53,15 @@ A sophisticated medical center management system demonstrating **advanced backen
 ┌─────────────────┐    ┌──────────────────┐    ┌──────────────────────┐
 │   Client App    │    │   Express API    │    │   PostgreSQL         │
 │                 │    │                  │    │                      │
-│ React + Next.js │◄──►│ ┌──────────────┐ │◄──►│ ┌────────────────────┐
-│  Frontend       │    │ │ Controllers  │ │    │ │   Tables          │ │
-│                 │    │ └──────────────┘ │    │ │ • users           │ │
-└─────────────────┘    │ ┌──────────────┐ │    │ │ • centers         │ │
-                       │ │ Middlewares  │ │    │ │ • patients        │ │
-┌─────────────────┐    │ └──────────────┘ │    │ │ • notes           │ │
-│   Swagger UI    │◄──►│ ┌──────────────┐ │    │ │ • user_centers    │ │
-│   /api/docs     │    │ │   Services   │ │    │ │ • patient_centers │ │
-└─────────────────┘    │ └──────────────┘ │    │                      │
+│ React + Next.js │◄──►│ ┌──────────────┐ │◄──►│ ┌──────────────────┐ │
+│  Frontend       │    │ │ Controllers  │ │    │ │   Tables         │ │
+│                 │    │ └──────────────┘ │    │ │ • users          │ │
+└─────────────────┘    │ ┌──────────────┐ │    │ │ • centers        │ │
+                       │ │ Middlewares  │ │    │ │ • patients       │ │
+┌─────────────────┐    │ └──────────────┘ │    │ │ • notes          │ │
+│   Swagger UI    │◄──►│ ┌──────────────┐ │    │ │ • user_centers   │ │
+│   /api/docs     │    │ │   Services   │ │    │ │ • patient_centers│ │
+└─────────────────┘    │ └──────────────┘ │    │ │-─────────────────│ │
                        └──────────────────┘    └──────────────────────┘
 ```
 
@@ -128,8 +128,9 @@ The seeded database includes ready-to-use accounts for testing:
 
 - **Node.js 20+** (uses native `process.loadEnvFile`)
 - **PostgreSQL 13+**
+- **Docker & Docker Compose** (optional, for containerized setup)
 
-### Installation & Setup
+### Installation & Setup (Local)
 
 ```bash
 # 1. Install dependencies
@@ -156,6 +157,36 @@ npm run seed:dev
 # 4. Start development server
 npm run dev
 ```
+
+### Docker Setup
+
+```bash
+# 1. Create .env file with your configuration
+cat > .env << EOF
+NODE_ENV=development
+PORT=4000
+DATABASE_URL=your_database_connection_string
+JWT_SECRET=your_jwt_secret
+JWT_TEMP_SECRET=your_temp_secret
+JWT_RESET_SECRET=your_reset_secret
+JWT_EXPIRES_IN=1h
+JWT_TEMP_EXPIRES_IN=5m
+CORS_ORIGIN=http://localhost:3000
+LOG_LEVEL=debug
+API_PREFIX=/api
+EOF
+
+# 2. Build and start the Docker container
+docker-compose up --build
+
+# 3. For running in detached mode (background)
+docker-compose up -d
+
+# 4. To stop the containers
+docker-compose down
+```
+
+> **Note**: When using Docker, the application will be available at `http://localhost:4000`. Make sure your database connection string in the .env file is properly configured to connect to your PostgreSQL instance.
 
 ### Access Points
 

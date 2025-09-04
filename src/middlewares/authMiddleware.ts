@@ -17,7 +17,6 @@ export const authMiddleware = async (
   if (sessionToken) {
     try {
       const decoded = jwt.verify(sessionToken, env.JWT_SECRET) as any;
-      console.log("decoded", decoded);
 
       const query = `
       SELECT
