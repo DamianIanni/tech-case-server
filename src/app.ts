@@ -9,8 +9,10 @@ import { env } from "./config/env";
 
 export const App = express();
 
+const allowedOrigins = env.CORS_ORIGIN.split(",");
+
 App.use(cookieParser());
-App.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+App.use(cors({ origin: allowedOrigins, credentials: true }));
 App.use(express.json());
 
 // General logger middleware. For debugging purposes.
