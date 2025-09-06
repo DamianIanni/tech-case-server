@@ -17,6 +17,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("1h"),
   JWT_TEMP_EXPIRES_IN: z.string().default("5m"),
   JWT_RESET_SECRET: z.string().min(2), // dev porpuse only
+  CRON_JOB_SECRET: z.string().min(2), // dev porpuse only
 
   // CORS
   CORS_ORIGIN: z.url().default("http://localhost:3000"),

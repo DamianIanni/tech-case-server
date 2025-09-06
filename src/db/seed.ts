@@ -24,6 +24,12 @@ const CONFIG = {
   DEMO_PASSWORD: "password123",
 };
 
+// Return type for the seed function
+export interface SeedResult {
+  success: boolean;
+  message: string;
+}
+
 const getRandomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -56,7 +62,8 @@ async function bulkInsert(
 }
 
 // --- MAIN FUNCTION ---
-async function main() {
+// Export the main function to be called from other modules
+export async function seedDatabase(): Promise<SeedResult> {
   const client = await dbpool.connect();
   console.log("🚀 Iniciando el proceso de seeding...");
 
@@ -320,14 +327,35 @@ async function main() {
         console.log("   ---");
       });
     }
+    
+    return {
+      success: true,
+      message: "Database seeded successfully"
+    };
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("❌ Error during seeding:", error);
-    process.exit(1);
+    
+    return {
+      success: false,
+      message: `Error during seeding: ${error instanceof Error ? error.message : String(error)}`
+    };
   } finally {
     client.release();
-    await dbpool.end();
+    // Don't end the pool when called as a function
+    // This allows the API server to continue running
   }
 }
 
-main();
+// Run the seed function directly when this file is executed as a script
+if (require.main === module) {
+  seedDatabase()
+    .then(() => {
+      console.log("Seed script completed, exiting process");
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error("Seed script failed:", error);
+      process.exit(1);
+    });
+}

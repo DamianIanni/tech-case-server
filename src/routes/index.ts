@@ -9,11 +9,13 @@ import { validateSchemaMiddleware } from "../middlewares/validateSchema";
 import { createCenterController } from "../controllers/center";
 import { createCenterSchema } from "../validations/centerSchema";
 import { swaggerRouter } from "./swagger";
+import { cronRouter } from "./cronRouter";
 
 const mainRouter = Router({ mergeParams: true });
 
 // API Routes
 mainRouter.use("/auth", authRouter);
+mainRouter.use("/cron", cronRouter);
 mainRouter.use("/account", tempAuthMiddleware, accountRouter);
 mainRouter.use("/center-selection", tempAuthMiddleware, tokenRouter);
 mainRouter.use(
