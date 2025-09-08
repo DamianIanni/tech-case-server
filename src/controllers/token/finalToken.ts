@@ -14,10 +14,7 @@ export const finalTokenController = asyncHandler(
     res.cookie("token", token, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
-      //env.NODE_ENV === "production",
-      // secure: false,
-      sameSite: "lax",
-      // sameSite: "none",
+      sameSite: env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000, // 1 day in ms
     });
 

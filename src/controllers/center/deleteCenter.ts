@@ -15,9 +15,7 @@ export const deleteCenterController = asyncHandler(
     res.cookie("tempToken", tempToken, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
-      // secure: false,
-      sameSite: "lax",
-      // sameSite: "none",
+      sameSite: env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 5 * 60 * 1000, // 1 day in ms
     });
     sendSuccess(res, { message: "Center deleted successfully" });

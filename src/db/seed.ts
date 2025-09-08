@@ -12,7 +12,7 @@ const CONFIG = {
   },
   PATIENTS_PER_CENTER: {
     min: 100,
-    max: 4000,
+    max: 1000,
   },
   NOTES_PER_PATIENT: {
     min: 0,
@@ -327,18 +327,20 @@ export async function seedDatabase(): Promise<SeedResult> {
         console.log("   ---");
       });
     }
-    
+
     return {
       success: true,
-      message: "Database seeded successfully"
+      message: "Database seeded successfully",
     };
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("❌ Error during seeding:", error);
-    
+
     return {
       success: false,
-      message: `Error during seeding: ${error instanceof Error ? error.message : String(error)}`
+      message: `Error during seeding: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
     };
   } finally {
     client.release();
