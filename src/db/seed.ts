@@ -12,7 +12,7 @@ const CONFIG = {
   },
   PATIENTS_PER_CENTER: {
     min: 100,
-    max: 1000,
+    max: 400,
   },
   NOTES_PER_PATIENT: {
     min: 0,
