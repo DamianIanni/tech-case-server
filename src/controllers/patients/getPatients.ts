@@ -14,9 +14,13 @@ export const getPatientController = asyncHandler(
     const center_id = req.user!.center_id!;
 
     const patient = await getPatientService(patient_id, center_id);
-
     if (!patient) {
-      return sendError(res, "Patient not found", 404, AppErrorCode.PATIENT_NOT_FOUND);
+      return sendError(
+        res,
+        "Patient not found",
+        404,
+        AppErrorCode.PATIENT_NOT_FOUND
+      );
     }
 
     sendSuccess(res, patient);
@@ -27,7 +31,6 @@ export const getAllPatientsController = asyncHandler(
   async (req: Request, res: Response) => {
     const center_id = req.user!.center_id!;
     const patients = await getAllPatientsService(center_id);
-
     if (!patients.length) {
       return sendSuccess(res, []);
     }

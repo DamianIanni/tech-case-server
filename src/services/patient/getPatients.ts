@@ -59,7 +59,7 @@ export async function getPaginationOrFilteredPatientsService(
   const dataQuery = `
     SELECT * FROM patients_with_notes p 
     WHERE p.center_id = $1 ${searchCondition}
-    ORDER BY p.created_at DESC 
+    ORDER BY p.last_name ASC, p.id ASC
     LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2};
   `;
 
